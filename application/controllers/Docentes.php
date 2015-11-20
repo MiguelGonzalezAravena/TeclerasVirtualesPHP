@@ -1,11 +1,21 @@
 <?php
 class Docentes extends CI_Controller {
+
+  var $i;
+  
+
   public function __construct() {
     parent::__construct();
+    $this->i = 0;
+    
     $this->load->model('docentes_model');
+    
     if($this->session->userdata('is_admin') == false) { // 1: Admin
-      redirect(site_url('login'));
+      if ($this->session->userdata('profile') != 1 ) {
+        redirect(site_url('login'));
+      }
     }
+    
   }
 
   public function index() {
@@ -26,6 +36,7 @@ class Docentes extends CI_Controller {
     $data['docentes'] = $this->docentes_model->get_users($id);
   
     $this->load->template('docentes/view', $data);
+
   }
   
   public function create() {
@@ -75,5 +86,65 @@ class Docentes extends CI_Controller {
     $this->docentes_model->delete_user($id);
     redirect(base_url('docentes'));
   }
+
+  public function crearClase(){
+
+    $d=rand(2000000,300000000);
+    
+    $this->form_validation->set_rules('nombreClase', 'Nombre de la clase', 'required');
+    $this->form_validation->set_rules('fechaInicio', 'Fecha de Inicio', 'required');
+    $i = $this->i;
+    
+    $idDocente = $this->session->userdata('id_user');
+
+    $data = array(
+      "nombreClase" => $this->input->post('nombreClase'),
+      "fechaInicio" => $this->input->post('fechaInicio'),
+      
+      "enlaces" => $this->docentes_model->verPreguntas(),
+      "idParalelo" => $this->docentes_model->verIdParalelo(),
+      "idAsignatura" => $this->docentes_model->verIdAsignatura(),
+      "idDocente" => $idDocente,
+      "i"=> $i,
+      "pass"=>$d
+    );
+
+
+    if (!$this->form_validation->run()) {
+      $this->load->template('docentes/crearClase', $data);
+    } else {
+      $this->docentes_model->crearClase();
+      $this->i++;
+      redirect(base_url('docentes/crearClase'));
+    }
+    
+    
+  }
+
+  public function mostrarClase(){
+    
+    $data = array(
+      "clases" => $this->docentes_model->verClases(),
+    );
+
+    if (!$this->form_validation->run()) {
+      $this->load->template('docentes/mostrarClase', $data);
+    } else {
+      $this->docentes_model->set_users($id);
+      redirect(base_url('docentes'));
+    }    
+
+  }
+
+
+  public function buscarPreguntas(){
   
+    $data = array(
+      "preguntas" => $this->docentes_model->verPreguntas()
+   );
+    
+    $this->load->template('docentes/buscarPreguntas', $data);
+    
+  }
+ 
 }
