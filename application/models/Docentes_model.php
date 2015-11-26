@@ -39,8 +39,10 @@ class Docentes_model extends CI_Model {
   }
 
   public function crearClase() {
-    $selectIdParalelo = $_POST['idParalelo'];
-    $selectIdAsignatura = $_POST['idAsignatura'];
+    $selectIdParalelo = $this->input->post('idParalelo');
+    $selectIdAsignatura = $this->input->post('idAsignatura');
+    //$selectIdParalelo = $_POST['idParalelo'];
+    //$selectIdAsignatura = $_POST['idAsignatura'];
     //$selectIdDocente = $_POST['idDocente'];
     
 
@@ -63,7 +65,8 @@ class Docentes_model extends CI_Model {
   }
 
   public function verPreguntas() {
-    $query = $this->db->query('SELECT PM_ID,PM_NOMBRE,PM_TEXTO,PM_TIPO,PM_FECHA_CREACION FROM tv_pregunta_maestra');
+    $query = $this->db->get('tv_pregunta_maestra');
+    //$query = $this->db->query('SELECT PM_ID,PM_NOMBRE,PM_TEXTO,PM_TIPO,PM_FECHA_CREACION FROM tv_pregunta_maestra');
     
     if ($query->num_rows() > 0) {
       return $query;
@@ -73,10 +76,16 @@ class Docentes_model extends CI_Model {
   
     redirect(base_url('docentes/crearClase'));
   }
+  public function ajaxbuscar_preguntas(){
+    $this->db->like('PM_NOMBRE', $this->input->get('pm_nombre'));
+    $query=$this->db->get('tv_pregunta_maestra');
+    return $query;
+  }
 
   public function verIdParalelo() {
-    $query = $this->db->query('SELECT PAR_ID FROM tv_paralelo');
-    
+    //$query = $this->db->query('SELECT PAR_ID FROM tv_paralelo');
+    $this->db->select('PAR_ID');
+    $query = $this->db->get('tv_paralelo');
     if ($query->num_rows() > 0) {
       return $query;
     }else{
@@ -87,8 +96,10 @@ class Docentes_model extends CI_Model {
   }
 
   public function verIdAsignatura() {
-    $query = $this->db->query('SELECT ASI_ID FROM tv_asignatura');
-    
+    //$query = $this->db->query('SELECT ASI_ID FROM tv_asignatura');
+    $this->db->select('ASI_ID');
+    $query = $this->db->get('tv_asignatura');
+
     if ($query->num_rows() > 0) {
       return $query;
     }else{
@@ -111,8 +122,8 @@ class Docentes_model extends CI_Model {
   }
 
   public function verClases() {
-    $query = $this->db->query('SELECT * FROM tv_clase');
-    
+    //$query = $this->db->query('SELECT * FROM tv_clase');
+    $query = $this->db->get('tv_clase');
     if ($query->num_rows() > 0) {
       return $query;
     }else{

@@ -146,5 +146,12 @@ class Docentes extends CI_Controller {
     $this->load->template('docentes/buscarPreguntas', $data);
     
   }
- 
+ public function ajaxbuscarPreguntas(){
+     $data = array(
+      "preguntas" => $this->docentes_model->ajaxbuscar_preguntas()
+   );
+    
+     $this->load->view('docentes/ajaxbuscarPreguntas', $data);
+
+  }
 }
