@@ -1,11 +1,14 @@
 <html>
 <body>
     <?php
-        echo form_open();
-        echo from_label('date','date');
-        echo from_input('date');echo '<br>';
-        echo form_label('Nombre', 'nombre');
-        echo form_input('nombre');echo '<br>';     
+        form_open('Buscar_Respuesta/Validar');
+        
+        from_label('date','date');
+        from_input('Seleccione clase');
+
+        Seleccione Pregunta <?=from_dropdow('Seleccione pregunta',array('1'=>'pregunta 1','2'=>'pregunta 2','3'=>'pregunta 3'));
+
+          
         echo form_submit('botonSubmit', 'Enviar');
         echo form_close();
     ?>
