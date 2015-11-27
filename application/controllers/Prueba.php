@@ -5,13 +5,18 @@ class Prueba extends CI_Controller {
 
   public function __construct() {
     parent::__construct();
-    $this->load->view('prueba_vista');
-    $this->load->database('default');
+   $this->load->model('prueba_model');
+   $this->load->database('tecleras');
   }
 
- public function index(){
- 	//$this->load->view('prueba_vista');
- }
+
+ public function ver(){
+ 		//$data['id']=$this->prueba_model->verTodo();
+ 		$data = array(
+ 			'enlace' => $this->prueba_model->verTodo()
+ 			 );
+ 		$this->load->view('prueba_vista',$data);
+	}
  
  }
 ?>
