@@ -11,10 +11,10 @@ class Prueba extends CI_Controller {
 
 
  public function ver(){
- 		//$data['id']=$this->prueba_model->verTodo();
  		$data = array(
- 			'enlace' => $this->prueba_model->verTodo(),
- 			'titulo' => 'Mostrar datos'
+ 			'titulo' => 'Mostrar datos',
+ 			'enlace' => $this->prueba_model->verTabla_Maestra(),
+ 			'join' => $this->prueba_model->join()
  			 );
  		$this->load->template('prueba_vista',$data);
 	}
