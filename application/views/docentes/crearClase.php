@@ -51,6 +51,7 @@
 	  	</div>
 
 	  	
+	  	
 	  	<div class="form-group">
 	    	<label for="fechaInicio">Fecha Inicio</label>
 	    	<input type="datetime" class="form-control" id="fechaInicio" name="fechaInicio" 
@@ -118,8 +119,8 @@
 								        
 								        <td>
 								        	<span >
-								        		<input type='radio' aria-label=''>
-								        	</span>
+							        		<input type='checkbox' name='pregunta[]' id='pregunta_".$row->PM_ID."' value=".$row->PM_ID.">
+							        	</span>
 								        </td>
 					        		</tr>";
 					        }

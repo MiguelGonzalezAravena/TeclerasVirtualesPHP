@@ -1,20 +1,13 @@
 <?php
 class Docentes extends CI_Controller {
-
   var $i;
-  
-
   public function __construct() {
     parent::__construct();
     $this->i = 0;
     
     $this->load->model('docentes_model');
     
-    if($this->session->userdata('is_admin') == false) { // 1: Admin
-      if ($this->session->userdata('profile') != 1 ) {
-        redirect(site_url('login'));
-      }
-    }
+    
     
   }
 
@@ -87,7 +80,7 @@ class Docentes extends CI_Controller {
     redirect(base_url('docentes'));
   }
 
-  
+  /* No se ocupa
   public function crearClase(){
 
     $d=rand(2000000,300000000);
@@ -95,7 +88,7 @@ class Docentes extends CI_Controller {
     $this->form_validation->set_rules('nombreClase', 'Nombre de la clase', 'required');
     $this->form_validation->set_rules('fechaInicio', 'Fecha de Inicio', 'required');
     $i = $this->i;
-    
+
     $idDocente = $this->session->userdata('id_user');
 
     $data = array(
@@ -113,32 +106,17 @@ class Docentes extends CI_Controller {
 
     if (!$this->form_validation->run()) {
       $this->load->template('docentes/crearClase', $data);
+      $this->docentes_model->crearClase($d);
     } else {
-      $this->docentes_model->crearClase();
+
+      $this->docentes_model->crearClase($d);
       $this->i++;
       redirect(base_url('docentes/crearClase'));
     }
-    
-    
   }
-
-  public function mostrarClase(){
-    
-    $data = array(
-      "preguntaSeleccionada" => $this->docentes_model->verPreguntasSeleccionadas()
-    );
-
-    if (!$this->form_validation->run()) {
-      $this->load->template('docentes/mostrarClase', $data);
-    } else {
-      $this->docentes_model->set_users($id);
-      redirect(base_url('docentes'));
-    }    
-
-  }
-  
-
-   public function mostrarAsignatura(){
+  */
+ 
+  public function mostrarAsignatura(){
     
     $d=rand(2000000,300000000);
     $data = array(
@@ -147,10 +125,13 @@ class Docentes extends CI_Controller {
     );
 
     if (!$this->form_validation->run()) {
+
       $this->load->template('docentes/mostrarAsignatura', $data);
+      $this->docentes_model->crearClase($d);
+
     } else {
-      $this->docentes_model->set_users($id);
-      redirect(base_url('docentes'));
+      $this->load->template('docentes/mostrarPreguntas');
+      redirect(base_url('docentes/mostrarPreguntas'));
     }    
   }
 
@@ -170,21 +151,20 @@ class Docentes extends CI_Controller {
         $this->docentes_model->set_users($id);
         redirect(base_url('docentes'));
       }    
-
   }
-    
   
-
- 
-/*
-  public function verPreguntas(){
+  public function mostrarPreguntaSeleccionada(){
     
     $data = array(
-      "enlaces" => $this->docentes_model->verPreguntas()
-   );
-    
-    $this->load->template('docentes/crearClase', $data);
-    
+      "preguntaSeleccionada" => $this->docentes_model->verPreguntasSeleccionadas()
+    );
+
+    if (!$this->form_validation->run()) {
+      $this->load->template('docentes/mostrarPreguntaSeleccionada', $data);
+    } else {
+      $this->docentes_model->set_users($id);
+      redirect(base_url('docentes'));
+    }    
   }
- */
+  
 }

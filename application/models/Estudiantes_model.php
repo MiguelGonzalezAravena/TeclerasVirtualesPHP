@@ -37,4 +37,37 @@ class Estudiantes_model extends CI_Model {
     $this->db->delete('tv_estudiante');
     redirect(base_url('estudiantes'));
   }
+
+   public function verPreguntaResponder() {
+
+
+    $consulta = $this->db->query('SELECT PM_ID,PM_NOMBRE,PM_TEXTO,PM_TIPO,PM_FECHA_CREACION FROM tv_pregunta_maestra where PM_ID in (1)');
+    //echo $query->num_rows();
+    
+    if ($consulta->num_rows() > 0) {
+      return $consulta;
+    }else{
+      return false;
+    }
+
+   
+
+  }
+
+
+  public function insertarRespuesta(){
+
+
+    $data = array(
+      'RES_ID' => 1,
+      'RES_TEXTO' => $this->input->post('textoResp'),
+      'PM_ID' => 1,
+      'PM_CORRECTA' => 1
+    );
+
+    $this->db->insert('tv_respuestas',$data);
+
+    redirect(base_url('estudiantes/responderPreguntas'));
+
+  }
 }

@@ -1,5 +1,7 @@
 <?php
 class Docentes_model extends CI_Model {
+  var $idClase=0;
+  var $idPreguntaRealizada=0;
 
   public function get_users($id = 0) {
     if ($id === 0) {
@@ -38,43 +40,7 @@ class Docentes_model extends CI_Model {
     redirect(base_url('docentes'));
   }
 
-  public function crearClase() {
-    $selectIdParalelo = $_POST['idParalelo'];
-    $selectIdAsignatura = $_POST['idAsignatura'];
-    //$selectIdDocente = $_POST['idDocente'];
-    
-
-    $data = array(
-      'CLA_PASSWORD' => $this->input->post('nombreClase'),
-      'CLA_FECHA_HORA_INICIO' => $this->input->post('fechaInicio'),
-      'DOC_ID' => $this->session->userdata('id_user'),
-      'ASI_ID' => $selectIdAsignatura,
-      'PAR_ID' => $selectIdParalelo,
-      'CLA_ID' => 1
-      );
-    $this->db->insert('tv_clase',$data);
-    $num_inserts = $this->db->affected_rows();
-    if($num_inserts == 0){
-      return false;
-    }else{
-      return true;
-    }
-    redirect(base_url('docentes/crearClase'));
-  }
-
-  public function verPreguntas() {
-
-    $query = $this->db->query('SELECT PM_ID,PM_NOMBRE,PM_TEXTO,PM_TIPO,PM_FECHA_CREACION FROM tv_pregunta_maestra');
-    
-    if ($query->num_rows() > 0) {
-      return $query;
-    }else{
-      return false;
-    }
-  
-    redirect(base_url('docentes/crearClase'));
-  }
-
+  /* No se ocupa
   public function verIdParalelo() {
     $query = $this->db->query('SELECT PAR_ID FROM tv_paralelo');
     
@@ -123,7 +89,35 @@ class Docentes_model extends CI_Model {
     redirect(base_url('docentes/mostrarClase'));
   }
 
+  */
+
+  public function buscarClase($idClase){
+
+    $query = $this->db->query('SELECT * FROM tv_clase WHERE CLA_ID ='.$idClase.'');
+    
+    if ($query->num_rows() > 0) {
+    return $this->docentes_model->buscarClase($idClase+1);
+    }else{
+      //echo $idClase;
+      return $idClase;
+    }
+  }
+
+  public function buscarPreguntaRealizada($idPreguntaRealizada){
+
+    $query = $this->db->query('SELECT * FROM tv_pregunta_realizada WHERE PR_ID ='.$idPreguntaRealizada.'');
+    
+    if ($query->num_rows() > 0) {
+    return $this->docentes_model->buscarPreguntaRealizada($idPreguntaRealizada+1);
+    }else{
+      //echo "Buscar pregunta realizada".$idPreguntaRealizada;
+      return $idPreguntaRealizada;
+    }
+  }
+
   public function verAsignatura() {
+
+
     $query = $this->db->query('SELECT * FROM tv_asignatura');
     
     if ($query->num_rows() > 0) {
@@ -132,48 +126,103 @@ class Docentes_model extends CI_Model {
       return false;
     }
   
-    redirect(base_url('docentes/mostrarClase'));
+    redirect(base_url('docentes/mostrarAsignatura'));
+  }
+
+  public function crearClase($password) {
+    //$selectIdParalelo = $_POST['idParalelo'];
+    //$selectIdAsignatura = $_POST['idAsignatura'];
+    //$selectIdDocente = $_POST['idDocente']; 
+    
+    $idClase = $this->idClase;
+    
+    $idClase = $this->docentes_model->buscarClase($idClase);
+    //echo $idClase;
+
+  
+    $data = array(
+      'CLA_PASSWORD' => $password,
+      'CLA_FECHA_HORA_INICIO' => date('Y-m-d H:i:s'),
+      'DOC_ID' => $this->session->userdata('id_user'),
+      'ASI_ID' => 1,
+      'PAR_ID' => 1,
+      'CLA_ID' => $idClase
+      );
+    $this->db->insert('tv_clase',$data);
+    $num_inserts = $this->db->affected_rows();
+    if($num_inserts == 0){
+      return false;
+    }else{
+      return true;
+    }
+    redirect(base_url('docentes/mostrarPreguntas'));
+  }
+
+  public function verPreguntas() {
+
+    $query = $this->db->query('SELECT PM_ID,PM_NOMBRE,PM_TEXTO,PM_TIPO,PM_FECHA_CREACION FROM tv_pregunta_maestra');
+    
+    if ($query->num_rows() > 0) {
+      return $query;
+    }else{
+      return false;
+    }
+  
+    redirect(base_url('docentes/crearClase'));
   }
 
   public function verPreguntasSeleccionadas() {
 
-    $i=0;
+    $idPreguntaRealizada = $this->idPreguntaRealizada;
+    $idPreguntaRealizada = $this->docentes_model->buscarPreguntaRealizada($idPreguntaRealizada);
     $pregunta = "";
-    $seleccionada = $this->input->post('pregunta');
+    $pregunta = $this->input->post('pregunta');
 
-    
-    for ($i=0; $i < sizeof($seleccionada) ; $i++) { 
-      if ($i== sizeof($seleccionada) -1 ) {
-        $pregunta = $pregunta.$seleccionada[$i];      
-      }else{
-        $pregunta = $pregunta.$seleccionada[$i].",";
+    echo "Pregunta Seleccionada:".$pregunta;
 
-      }
-      
-    }
-    //echo $pregunta;
+    $idClaseSeleccionada = "";
+    $idClaseSeleccionada = $this->input->post('clase');
+    echo("Clase seleccionada".$idClaseSeleccionada);
 
     //$consulta = 'SELECT PM_ID,PM_NOMBRE,PM_TEXTO,PM_TIPO,PM_FECHA_CREACION FROM tv_pregunta_maestra where PM_ID in ('.$pregunta.')';
-
-    //echo $consulta;
-
-    
 
     if($pregunta == ""){
       $consulta = 'SELECT PM_ID,PM_NOMBRE,PM_TEXTO,PM_TIPO,PM_FECHA_CREACION FROM tv_pregunta_maestra where PM_ID in (1)';
     }else{
-      $consulta = 'SELECT PM_ID,PM_NOMBRE,PM_TEXTO,PM_TIPO,PM_FECHA_CREACION FROM tv_pregunta_maestra where PM_ID in ('.$pregunta.')';
 
+      $consulta = 'SELECT PM_ID,PM_NOMBRE,PM_TEXTO,PM_TIPO,PM_FECHA_CREACION FROM tv_pregunta_maestra where PM_ID in ('.$pregunta.')';
+      
     }
 
+    $query = $this->db->query('SELECT CLA_ID FROM tv_clase WHERE CLA_ID = (SELECT MAX(CLA_ID) from tv_clase)');
+    //echo $query->num_rows();
+    
+    
+    foreach ($query->result_array() as $row)
+    {
+            echo $row['CLA_ID'];
+            
+    }
+
+
+    $data = array(
+      'PR_ID' => $idPreguntaRealizada ,
+      'PR_HORA_INICIO' => date('Y-m-d H:i:s'),
+      'PR_HORA_FIN' => date('Y-m-d H:i:s'),
+      'PR_TIEMPO_MAX' => date('Y-m-d H:i:s'),
+      'PM_ID' => $pregunta,
+      'CLA_ID' => $row['CLA_ID']
+      );
+
+    $this->db->insert('tv_pregunta_realizada',$data);
+
     $query = $this->db->query($consulta);  
-     if ($query->num_rows() > 0) {
-        return $query;
-      }else{
-        return false;
-      }
-        return $query;
-    redirect(base_url('docentes/mostrarClase'));
+    if ($query->num_rows() > 0) {
+      return $query;
+    }else{
+      return false;
+    }
+    redirect(base_url('docentes/mostrarPreguntaSeleccionada'));
 
   }
 
