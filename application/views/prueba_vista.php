@@ -1,4 +1,4 @@
-<div style="text-align:center;">
+<div style="text-align:center;"> 
   <table style="border:1px solid black;">
   	<tr>
   		<?php
