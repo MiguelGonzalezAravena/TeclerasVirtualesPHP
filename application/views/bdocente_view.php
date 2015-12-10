@@ -2,17 +2,36 @@
 defined('BASEPATH') OR exit('No direct script access allowed');
 ?>
 
+
+
+
 <div class="page-header">
-	<h1>Selecione pregunta</h1>
+  <h1>
+    Selecione pregunta
+  </h1>
 </div>
 
-<br/>
-Seleccione Clase:
-<input type="date" name="fecha"><br/>
 
-Seleccione Preguntas: 
-<select name="myselect">
-<option value="Pregunta1" <?php echo set_select('myselect', 'Pregunta1', TRUE); ?> >Pregunta 1</option>
-<option value="Pregunta2" <?php echo set_select('myselect', 'Pregunta2'); ?> >Pregunta 2</option>
-<option value="Pregunta3" <?php echo set_select('myselect', 'Pregunta3'); ?> >Pregunta 3</option>
-</select>
+<?php
+echo form_open('bdocente/submit');
+
+//probando cambo fecha
+echo form_label('Seleccione Clase: ');
+$date = array(
+	'type'=> 'text',
+	'id' => 'validate_dd_id',
+	'name' => 'date',
+	'class' => 'input_box',
+	'placeholder' => 'dd/mm/yyyy',
+	'required' => ''
+	);
+echo form_input($date);
+
+?>
+
+
+<?php 
+echo form_label('Seleccione Pregunta: '), form_dropdown('selPregunta', $arrPregunta);
+echo form_submit($date);
+echo form_close();
+?>
