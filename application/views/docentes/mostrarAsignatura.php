@@ -7,7 +7,6 @@
 		<div class="panel-heading">Ingresar a Clase</div>
 		<div class="panel-body">
 			<div class="table-responsive">
-			<form name="formulario1" id="formulario1" method="GET">
 				<table class="table table-striped">
 					<thead>
 						<tr>
@@ -33,39 +32,38 @@
 				   		?>
 				
 			  		</tbody>
-			  </table>
-			</form>
+			  	</table>
 			</div>
 	  	</div>
 	</div>
 
-
+	
 	<div class="container">
- 	<!-- Modal -->
+	 	<!-- Modal -->
 	  	<div class="modal fade" id="myModal" role="dialog">
 		    <div class="modal-dialog">
 		    
 		      <!-- Modal content-->
-		      <div class="modal-content">
-		        <div class="modal-header">
-		          <button type="button" class="close" data-dismiss="modal">&times;</button>
-		          <h4 class="modal-title">Ingresar a Clase</h4>
-		        </div>
-		        <div class="modal-body">
-		          	Esta a punto de iniciar una clase, esto mostrará la clase a los alumnos que esten alrededor
+	      		<div class="modal-content">
 
-		          	<h3>El password para ingresar a la clase es: <?php echo $pass; ?> </h3>
+		        	<div class="modal-header">
+			        	<button type="button" class="close" data-dismiss="modal">&times;</button>
+			          	<h4 class="modal-title">Ingresar a Clase</h4>
+			        </div>
 
-		        </div>
-		        
-		        <div class="modal-footer">
+			        <div class="modal-body">
+			          	Esta a punto de iniciar una clase, esto mostrará la clase a los alumnos que esten alrededor
 
-		          <button type="button" class="btn btn-default" data-dismiss="modal" onclick="document.location.href='mostrarPreguntas';">Entrar </button>
+			          	<h3>El password para ingresar a la clase es: <?php echo $pass; ?> </h3>
 
-		        </div>
-		        
-		      </div>
-		      
+			        </div>
+
+			        <form role="form" action="<?php echo base_url().'index.php/Docentes/crearClase/'.$pass.''?>" method="post">
+			        	<div class="modal-footer">
+			        		<input type="submit" id="add" onclick="<?php echo base_url().'index.php/Docentes/mostrarPreguntas'?>" />
+			        	</div>
+			       	</form>
+		      	</div>
 		    </div>
 	  	</div>
 	</div>

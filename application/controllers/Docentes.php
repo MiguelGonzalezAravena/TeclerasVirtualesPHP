@@ -7,8 +7,6 @@ class Docentes extends CI_Controller {
     
     $this->load->model('docentes_model');
     
-    
-    
   }
 
   public function index() {
@@ -80,46 +78,20 @@ class Docentes extends CI_Controller {
     redirect(base_url('docentes'));
   }
 
-  /* No se ocupa
-  public function crearClase(){
+  public function crearClase($d){
 
-    $d=rand(2000000,300000000);
+    $this->docentes_model->crearClase($d);
+    redirect(base_url('docentes/mostrarPreguntas'));
     
-    $this->form_validation->set_rules('nombreClase', 'Nombre de la clase', 'required');
-    $this->form_validation->set_rules('fechaInicio', 'Fecha de Inicio', 'required');
-    $i = $this->i;
-
-    $idDocente = $this->session->userdata('id_user');
-
-    $data = array(
-      "nombreClase" => $this->input->post('nombreClase'),
-      "fechaInicio" => $this->input->post('fechaInicio'),
-      
-      "enlaces" => $this->docentes_model->verPreguntas(),
-      "idParalelo" => $this->docentes_model->verIdParalelo(),
-      "idAsignatura" => $this->docentes_model->verIdAsignatura(),
-      "idDocente" => $idDocente,
-      "i"=> $i,
-      "pass"=>$d
-    );
-
-
-    if (!$this->form_validation->run()) {
-      $this->load->template('docentes/crearClase', $data);
-      $this->docentes_model->crearClase($d);
-    } else {
-
-      $this->docentes_model->crearClase($d);
-      $this->i++;
-      redirect(base_url('docentes/crearClase'));
-    }
+    
   }
-  */
  
   public function mostrarAsignatura(){
-    
+
     $d=rand(2000000,300000000);
+    
     $data = array(
+      
       "asignatura" => $this->docentes_model->verAsignatura(),
       "pass"=>$d
     );
@@ -127,13 +99,14 @@ class Docentes extends CI_Controller {
     if (!$this->form_validation->run()) {
 
       $this->load->template('docentes/mostrarAsignatura', $data);
-      $this->docentes_model->crearClase($d);
 
     } else {
       $this->load->template('docentes/mostrarPreguntas');
-      redirect(base_url('docentes/mostrarPreguntas'));
+      
     }    
   }
+
+
 
   public function mostrarPreguntas(){
     
@@ -156,6 +129,7 @@ class Docentes extends CI_Controller {
   public function mostrarPreguntaSeleccionada(){
     
     $data = array(
+
       "preguntaSeleccionada" => $this->docentes_model->verPreguntasSeleccionadas()
     );
 
@@ -165,6 +139,14 @@ class Docentes extends CI_Controller {
       $this->docentes_model->set_users($id);
       redirect(base_url('docentes'));
     }    
+  }
+
+  public function insertarTiempoFinal(){
+    
+    $tiempoFinal = $this->input->post('tiempoFinal');
+    echo($tiempoFinal);
+    $this->docentes_model->insertarTiempoFinal($tiempoFinal);
+
   }
   
 }

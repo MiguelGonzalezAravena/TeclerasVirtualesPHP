@@ -15,6 +15,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
     <link rel="stylesheet" type="text/css" href="<?php echo base_url('assets/css/style.css'); ?>">
 
     <script type="text/javascript" src="<?php echo base_url('assets/js/jquery-1.11.3.min.js'); ?>"></script>
+    
     <!-- Latest compiled and minified JavaScript -->
     <script src="<?php echo base_url('assets/js/bootstrap.min.js'); ?>" integrity="sha512-K1qjQ+NcF2TYO/eI3M6v8EiNYZfA95pQumfvcVrTHtwQVDG+aHRqLi/ETn2uB+1JqwYqVG3LIvdm9lj6imS/pQ==" crossorigin="anonymous"></script>
   </head>

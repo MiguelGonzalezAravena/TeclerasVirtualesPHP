@@ -173,6 +173,7 @@ class Docentes_model extends CI_Model {
 
   public function verPreguntasSeleccionadas() {
 
+    $tiempoMax = 0;
     $idPreguntaRealizada = $this->idPreguntaRealizada;
     $idPreguntaRealizada = $this->docentes_model->buscarPreguntaRealizada($idPreguntaRealizada);
     $pregunta = "";
@@ -209,20 +210,43 @@ class Docentes_model extends CI_Model {
       'PR_ID' => $idPreguntaRealizada ,
       'PR_HORA_INICIO' => date('Y-m-d H:i:s'),
       'PR_HORA_FIN' => date('Y-m-d H:i:s'),
-      'PR_TIEMPO_MAX' => date('Y-m-d H:i:s'),
+      'PR_TIEMPO_MAX' => $tiempoMax,
       'PM_ID' => $pregunta,
       'CLA_ID' => $row['CLA_ID']
       );
 
     $this->db->insert('tv_pregunta_realizada',$data);
 
+    $tiempoMax = $this->db->query('SELECT PR_TIEMPO_MAX FROM tv_pregunta_realizada where PR_ID =(SELECT MAX(PR_ID) from tv_pregunta_realizada)');
+
+    //echo("tiempoMax".$tiempoMax->num_rows());
+
     $query = $this->db->query($consulta);  
-    if ($query->num_rows() > 0) {
-      return $query;
+
+    if ($tiempoMax->num_rows() > 0) {
+      return $tiempoMax;
     }else{
       return false;
     }
     redirect(base_url('docentes/mostrarPreguntaSeleccionada'));
+
+  }
+  public function insertarTiempoFinal($tiempoFinal) {
+    //echo($tiempoFinal);
+    $consulta = "SELECT MAX(PR_ID) as idMAX from tv_pregunta_realizada";
+    $result = $this->db->query($consulta);  
+    //print_r($result);
+    
+    foreach ($result->result_array() as $row){
+          $idMAX = $row['idMAX'];
+    }
+
+    
+    $data = array(
+        'PR_HORA_FIN' => $tiempoFinal
+    );
+    $this->db->where('PR_ID', $idMAX);
+    return $this->db->update('tv_pregunta_realizada', $data);
 
   }
 
