@@ -43,7 +43,23 @@ class Estudiantes_model extends CI_Model {
      * Una forma más elegante de realizar consultas, Hay que aprovechar los recursos que ofrece el framework.
      */
     $query = $this->db->get_where('tv_clase', array('CLA_PASSWORD' => $password));
+    
     if ($query->num_rows() > 0) {
+      $d=rand(0,4294967295);
+      $id=$this->session->userdata('id_user');
+      
+      foreach ($query->result() as $row){
+        
+        if($row->CLA_PASSWORD=$password){
+            $data = array(
+          'AC_ID' => $d,
+          'EST_ID' => $id,
+          'CLA_ID' => $row->CLA_ID,
+          );
+        $this->db->insert('tv_asistencia_clase', $data);
+           
+        }
+      }
       redirect(base_url('estudiantes/vista_clase'));
     } else {
       redirect(base_url('estudiantes/ingresarClase?fail'));

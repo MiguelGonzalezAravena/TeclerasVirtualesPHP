@@ -4,22 +4,22 @@ defined('BASEPATH') OR exit('No direct script access allowed');
   $password = array('name' => 'password', 'placeholder' => 'Introduce contraseña de la clase', 'class' => 'form-control');
   $submit = array('name' => 'submit', 'value' => 'Ingresar a la clase', 'title' => 'Iniciar sesión', 'class' => 'btn btn-warning');
 ?>
-  <div class="container-fluid">
-    <h1>Bienvenido, <?php echo $this->session->userdata('name'); ?></h1>
-    <div class="panel panel-warning">
-      <div class="panel-heading">Ingresar a la clase</div>
-      <div class="panel-body">
-      	<?php echo form_open('estudiantes/ingresarClase'); ?>
-      	<div class="form-group">
-	        <?php
-	          echo form_password($password);
-	        ?>
-    		</div>
-    		<div class="form-group">
-	        <?php
-	          echo form_submit($submit);
-	        ?>
-    		</div>
-	  	</div>
+<div class="container-fluid">
+  <h1>Bienvenido, <?php echo $this->session->userdata('name'); ?></h1>
+  <div class="panel panel-warning">
+    <div class="panel-heading">Ingresar a la clase</div>
+    <div class="panel-body">
+    	<?php echo form_open('estudiantes/ingresarClase'); ?>
+    	<div class="form-group">
+        <?php
+          echo form_password($password);
+        ?>
+  		</div>
+  		<div class="form-group">
+        <?php
+          echo form_submit($submit);
+        ?>
+  		</div>
   	</div>
 	</div>
+</div>

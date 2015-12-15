@@ -15,7 +15,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
     <h1>Acceso de usuario</h1>
     <div class="panel panel-default">
     <div class="panel-body">
-    <?php echo form_open(site_url('login/new_user')); ?>
+    <?php echo form_open('login/new_user'); ?>
       <div class="form-group">
         <?php
           echo form_label('Nombre de usuario:', 'username');
