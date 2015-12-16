@@ -3,11 +3,6 @@ class Estudiantes extends CI_Controller {
   public function __construct() {
     parent::__construct();
     $this->load->model('estudiantes_model');
-    if($this->session->userdata('is_admin') == false) { // 1: Admin
-      if($this->session->userdata('profile') != 2) {
-        redirect(site_url('login'));
-      }
-    }
   }
 
   public function index() {
@@ -77,6 +72,20 @@ class Estudiantes extends CI_Controller {
     $this->estudiantes_model->delete_user($id);
     redirect(base_url('estudiantes'));
   }
+
+  public function responderPreguntas() {
+    $data = array(
+      "hola" => "hola",
+      "preguntaSeleccionada" => $this->estudiantes_model->verPreguntaResponder(),
+    );
+
+    if (!$this->form_validation->run()) {
+      $this->load->template('estudiantes/responderPreguntas', $data);
+      $this->estudiantes_model->insertarRespuesta();
+    } else {
+      redirect(base_url('estudiantes'));
+    }    
+  }   
   
   public function ingresarClase() {
     

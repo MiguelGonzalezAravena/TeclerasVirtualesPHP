@@ -1,11 +1,12 @@
 <?php
 class Docentes extends CI_Controller {
+  var $i;
   public function __construct() {
     parent::__construct();
+    $this->i = 0;
+    
     $this->load->model('docentes_model');
-    if($this->session->userdata('is_admin') == false) { // 1: Admin
-      redirect(site_url('login'));
-    }
+    
   }
 
   public function index() {
@@ -26,6 +27,7 @@ class Docentes extends CI_Controller {
     $data['docentes'] = $this->docentes_model->get_users($id);
   
     $this->load->template('docentes/view', $data);
+
   }
   
   public function create() {
@@ -74,6 +76,77 @@ class Docentes extends CI_Controller {
 
     $this->docentes_model->delete_user($id);
     redirect(base_url('docentes'));
+  }
+
+  public function crearClase($d){
+
+    $this->docentes_model->crearClase($d);
+    redirect(base_url('docentes/mostrarPreguntas'));
+    
+    
+  }
+ 
+  public function mostrarAsignatura(){
+
+    $d=rand(2000000,300000000);
+    
+    $data = array(
+      
+      "asignatura" => $this->docentes_model->verAsignatura(),
+      "pass"=>$d
+    );
+
+    if (!$this->form_validation->run()) {
+
+      $this->load->template('docentes/mostrarAsignatura', $data);
+
+    } else {
+      $this->load->template('docentes/mostrarPreguntas');
+      
+    }    
+  }
+
+
+
+  public function mostrarPreguntas(){
+    
+    
+      $data = array(
+        "preguntas" => $this->docentes_model->verPreguntas()
+        
+      );
+
+      if (!$this->form_validation->run()) {
+        $this->load->template('docentes/mostrarPreguntas', $data);
+        
+
+      } else {
+        $this->docentes_model->set_users($id);
+        redirect(base_url('docentes'));
+      }    
+  }
+  
+  public function mostrarPreguntaSeleccionada(){
+    
+    $data = array(
+
+      "preguntaSeleccionada" => $this->docentes_model->verPreguntasSeleccionadas()
+    );
+
+    if (!$this->form_validation->run()) {
+      $this->load->template('docentes/mostrarPreguntaSeleccionada', $data);
+    } else {
+      $this->docentes_model->set_users($id);
+      redirect(base_url('docentes'));
+    }    
+  }
+
+  public function insertarTiempoFinal(){
+    
+    $tiempoFinal = $this->input->post('tiempoFinal');
+    echo($tiempoFinal);
+    $this->docentes_model->insertarTiempoFinal($tiempoFinal);
+
   }
   
 }
