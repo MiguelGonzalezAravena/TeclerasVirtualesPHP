@@ -1,4 +1,4 @@
-  <div class="container-fluid">
+<div class="container-fluid">
     <h1>Bienvenido, <?php echo $this->session->userdata('name'); ?></h1>
     <div class="panel panel-info">
       <div class="panel-heading">Panel de Docentes</div>

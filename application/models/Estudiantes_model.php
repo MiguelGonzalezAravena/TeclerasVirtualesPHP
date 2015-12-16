@@ -38,26 +38,52 @@ class Estudiantes_model extends CI_Model {
     redirect(base_url('estudiantes'));
   }
 
+
+  public function ingresarClase($password) {
+    /**
+     * Una forma más elegante de realizar consultas, Hay que aprovechar los recursos que ofrece el framework.
+     */
+    $query = $this->db->get_where('tv_clase', array('CLA_PASSWORD' => $password));
+    
+    if ($query->num_rows() > 0) {
+      $d=rand(0,2147483647);
+      $id=$this->session->userdata('id_user');
+      //para que no dupliquen las PK de la tabla tv_asistencia_clase
+
+      $pk = $this->db->get_where('tv_asistencia_clase', array('AC_ID' => $d));
+
+        foreach ($pk->result() as $row=>$d){
+               $d=rand(0,2147483647);
+        }
+      foreach ($query->result() as $row){
+        
+        if($row->CLA_PASSWORD=$password){
+            $data = array(
+          'AC_ID' => $d,
+          'EST_ID' => $id,
+          'CLA_ID' => $row->CLA_ID,
+          );
+        $this->db->insert('tv_asistencia_clase', $data);
+           
+        }
+      }
+      redirect(base_url('estudiantes/vista_clase'));
+    } else {
+      redirect(base_url('estudiantes/ingresarClase?fail'));
+    }
+  }
+
    public function verPreguntaResponder() {
-
-
     $consulta = $this->db->query('SELECT PM_ID,PM_NOMBRE,PM_TEXTO,PM_TIPO,PM_FECHA_CREACION FROM tv_pregunta_maestra where PM_ID in (1)');
-    //echo $query->num_rows();
     
     if ($consulta->num_rows() > 0) {
       return $consulta;
-    }else{
+    } else {
       return false;
     }
-
-   
-
   }
 
-
-  public function insertarRespuesta(){
-
-
+  public function insertarRespuesta() {
     $data = array(
       'RES_ID' => 1,
       'RES_TEXTO' => $this->input->post('textoResp'),
