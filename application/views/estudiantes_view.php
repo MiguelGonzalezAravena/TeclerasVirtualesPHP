@@ -6,6 +6,13 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 ?>
 <div class="container-fluid">
   <h1>Bienvenido, <?php echo $this->session->userdata('name'); ?></h1>
+  <?php
+    if($error):
+  ?>
+    <div class="alert alert-danger" role="alert">La contraseña introducida no es válida. Por favor intente nuevamente.</div>
+  <?php
+    endif;
+  ?>
   <div class="panel panel-warning">
     <div class="panel-heading">Ingresar a la clase</div>
     <div class="panel-body">

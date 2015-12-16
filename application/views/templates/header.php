@@ -50,6 +50,12 @@ defined('BASEPATH') OR exit('No direct script access allowed');
           <li><?php echo anchor(base_url() . 'docentes', 'Docentes'); ?></li>
           <li><?php echo anchor(base_url() . 'asignaturas', 'Asignaturas'); ?></li>
         <?php } ?>
+        <?php if($this->session->userdata('profile') == 1 && !$this->session->userdata('is_admin')): ?>
+          <li><?php echo anchor(base_url('docentes/mostrarAsignatura'), 'Asignaturas'); ?></li>
+          <li><?php echo anchor(base_url('crudpregunta/index/1'), 'Preguntas'); ?></li>
+          <li><?php echo anchor(base_url('cursos/'), 'Cursos'); ?></li>
+          
+        <?php endif; ?>
       </ul>
       <ul class="nav navbar-nav navbar-right">
         <li>

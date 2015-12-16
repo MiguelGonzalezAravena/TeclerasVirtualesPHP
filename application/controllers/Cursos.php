@@ -22,10 +22,12 @@ class Cursos extends CI_Controller {
   }
 
 
-  public function create() {
+  public function create($asignatura) {
     $data['titulo'] = 'Crear curso';
+    $data['asignatura'] = $asignatura;
     $this->form_validation->set_rules('id', 'Identificador', 'required|is_unique[tv_paralelo.PAR_ID]');
-    $this->form_validation->set_rules('paralelo', 'Paralelo', 'required|integer');
+    $this->form_validation->set_rules('asignatura', 'Asignatura', 'required|integer');
+    $this->form_validation->set_rules('paralelo', 'Paralelo', 'required|is_unique[tv_paralelo.PAR_NUMERO]|integer');
     /*$this->form_validation->set_rules('email', 'Correo electrónico', 'required|valid_email|is_unique[tv_docente.DOC_CORREO]');
     $this->form_validation->set_rules('password', 'Contraseña', 'required');
     */

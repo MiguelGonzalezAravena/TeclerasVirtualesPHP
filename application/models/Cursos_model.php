@@ -6,8 +6,8 @@ class Cursos_model extends CI_Model {
     $data = array(
       'PAR_ID' => $this->input->post('id'),
       'PAR_NUMERO' => $this->input->post('paralelo'),
-      'ASI_ID' => '1',
-      'TV_DOCENTE_DOC_ID' => '3',
+      'ASI_ID' => $this->input->post('asignatura'),
+      'TV_DOCENTE_DOC_ID' => $this->session->userdata('id_user'),
     );
 
     if ($id === 0) {

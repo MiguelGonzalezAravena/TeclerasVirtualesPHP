@@ -2,6 +2,7 @@
 defined('BASEPATH') OR exit('No direct script access allowed');
 
 $id = array('name' => 'id', 'type' => 'number', 'placeholder' => 'Identificador', 'class' => 'form-control', 'value' => (isset($_POST['id'])) ? $_POST['id'] : '');
+$asignatura = array('name' => 'asignatura', 'type' => 'number', 'placeholder' => 'Asignatura', 'class' => 'form-control', 'value' => (isset($_POST['asignatura'])) ? $_POST['asignatura'] : $asignatura);
 $paralelo = array('name' => 'paralelo', 'type' => 'number', 'placeholder' => 'Número', 'class' => 'form-control', 'value' => (isset($_POST['paralelo'])) ? $_POST['paralelo'] : '');
 
 $submit = array('type' => 'submit', 'content' => 'Crear', 'class' => 'btn btn-success');
@@ -29,6 +30,16 @@ $submit = array('type' => 'submit', 'content' => 'Crear', 'class' => 'btn btn-su
           ?>
         </div>
 
+         <div class="form-group">
+ 
+           <?php
+          /*
+           * Asignatura 
+          */
+          echo form_label('Asignatura', 'asignatura');
+          echo form_input($asignatura);
+          ?>
+        </div>
          <div class="form-group">
  
            <?php

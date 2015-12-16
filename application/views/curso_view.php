@@ -34,6 +34,7 @@
         </table>
       </div>
     </div>
+    <?php echo anchor('docentes/mostrarAsignatura', 'Volver a asignaturas', 'class="btn btn-primary"'); ?>
   </div>
 
   

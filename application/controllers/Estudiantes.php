@@ -74,15 +74,16 @@ class Estudiantes extends CI_Controller {
   }
 
   public function responderPreguntas() {
+    $pregunta = $this->uri->segment(3);
+    $clase = $this->uri->segment(4);
     $data = array(
-      "hola" => "hola",
-      "preguntaSeleccionada" => $this->estudiantes_model->verPreguntaResponder(),
+      "preguntaSeleccionada" => $this->estudiantes_model->verPreguntaResponder($pregunta, $clase),
     );
 
     if (!$this->form_validation->run()) {
       $this->load->template('estudiantes/responderPreguntas', $data);
-      $this->estudiantes_model->insertarRespuesta();
     } else {
+      $this->estudiantes_model->insertarRespuesta($pregunta, $clase);
       redirect(base_url('estudiantes'));
     }    
   }   
@@ -100,6 +101,10 @@ class Estudiantes extends CI_Controller {
     
     if (!$this->form_validation->run()) {
       $data['titulo'] = 'Ingresar a clase';
+      $data['error'] = false;
+      if($this->input->get('fail') == 1) {
+        $data['error'] = true;
+      }
       /**
        * Si el formulario no ha sido cargado aún, carga la vista
        */
@@ -116,8 +121,9 @@ class Estudiantes extends CI_Controller {
     }
   }
 
-  public function vista_clase() {
+  public function vista_clase($clase) {
     $data['titulo'] = 'Ingresar a clase';
+    $data['clase'] = $clase;
     $this->load->template('estudiantes/vista_clase',$data);
   }
 }

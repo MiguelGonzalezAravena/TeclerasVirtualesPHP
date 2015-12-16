@@ -1,6 +1,6 @@
 <div class="container">
    <h1>Lista de Preguntas</h1>
-      <?php echo anchor('crearpregunta/index/'. $paralelo.'', 'Crear Pregunta', 'class="btn btn-success"'); ?>
+      <?php echo anchor('crearpregunta/index/'. $paralelo, 'Crear Pregunta', 'class="btn btn-success"'); ?>
     <div class="row">
       <div class="col-md-12">&nbsp;</div>
     </div>
@@ -22,8 +22,15 @@
                 <th class="scope"><?php echo $user['PM_ID'] ?></th>
                 <td><?php echo $user['PM_NOMBRE'] ?></td>
                 <td><?php echo $user['PM_TIPO'] ?></td>
-                <td><?php echo anchor('crudpregunta/eliminarPregunta/'. $user['PM_ID'].'/'. $paralelo.'', 'Eliminar', 'class="btn btn-success"');
-                echo anchor('crudpregunta/getPregunta/'. $user['PM_ID'].'/'.$user['PM_TIPO'].'/'. $paralelo.'', 'Modificar', 'class="btn btn-success"'); ?></td>
+                <td>
+                  <div class="btn-group">
+                    <?php
+                      echo anchor('crudpregunta/getPregunta/'. $user['PM_ID'].'/'.$user['PM_TIPO'].'/'. $paralelo, 'Editar', 'class="btn btn-warning"');
+                      echo anchor('Prueba/ver/'. $user['PM_ID'], 'Ver', 'class="btn btn-info"');
+                      echo anchor('crudpregunta/eliminarPregunta/'. $user['PM_ID'].'/'. $paralelo, 'Eliminar', 'class="btn btn-danger"');
+                    ?>
+                  </div>
+                </td>
                   <div class="btn-group">
                   </div>
                 </td>

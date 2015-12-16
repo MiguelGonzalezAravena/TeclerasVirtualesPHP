@@ -1,5 +1,3 @@
-<?php echo $hola ?>
-
 <div class="container-fluid">
 <form role="form" method="POST">
 	<h1>Pregunta a responder</h1>

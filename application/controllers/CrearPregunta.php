@@ -10,6 +10,7 @@ if(!defined('BASEPATH')) exit('No direct script access allowed');
 
   		public function index($paralelo){
   			$data['titulo'] = 'Crear Pregunta';
+        $paralelo = 1;
         $data['paralelo'] = $paralelo;
     		$this->load->template('crudpreguntas/crearpregunta_view', $data);
   		}

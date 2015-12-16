@@ -57,43 +57,48 @@ class Estudiantes_model extends CI_Model {
         }
       foreach ($query->result() as $row){
         
-        if($row->CLA_PASSWORD=$password){
+        if($row->CLA_PASSWORD == $password){
             $data = array(
           'AC_ID' => $d,
           'EST_ID' => $id,
           'CLA_ID' => $row->CLA_ID,
           );
-        $this->db->insert('tv_asistencia_clase', $data);
+          $this->db->insert('tv_asistencia_clase', $data);
+          $clase_id = $row->CLA_ID;
            
         }
       }
-      redirect(base_url('estudiantes/vista_clase'));
+      redirect(base_url('estudiantes/vista_clase/' . $clase_id));
     } else {
-      redirect(base_url('estudiantes/ingresarClase?fail'));
+      redirect(base_url('estudiantes/ingresarClase?fail=1'));
     }
   }
 
-   public function verPreguntaResponder() {
-    $consulta = $this->db->query('SELECT PM_ID,PM_NOMBRE,PM_TEXTO,PM_TIPO,PM_FECHA_CREACION FROM tv_pregunta_maestra where PM_ID in (1)');
+   public function verPreguntaResponder($pregunta, $clase) {
+    $this->db->select('*');
+    $this->db->from('tv_pregunta_realizada');
+    $this->db->where(array('tv_pregunta_realizada.PM_ID' => $pregunta, 'tv_pregunta_realizada.CLA_ID' => $clase));
+    $this->db->join('tv_pregunta_maestra', 'tv_pregunta_maestra.PM_ID = tv_pregunta_realizada.PM_ID');
+    $query = $this->db->get();
     
-    if ($consulta->num_rows() > 0) {
-      return $consulta;
+    if ($query->num_rows() > 0) {
+      return $query;
     } else {
       return false;
     }
   }
 
-  public function insertarRespuesta() {
+  public function insertarRespuesta($pregunta, $clase) {
     $data = array(
+      'PRES_ID' => 1,
+      'PR_ID' => $pregunta,
+      'EST_ID' => $this->session->userdata('id_user'),
       'RES_ID' => 1,
-      'RES_TEXTO' => $this->input->post('textoResp'),
-      'PM_ID' => 1,
-      'PM_CORRECTA' => 1
     );
 
-    $this->db->insert('tv_respuestas',$data);
+    $this->db->insert('tv_pregunta_respondida', $data);
 
-    redirect(base_url('estudiantes/responderPreguntas'));
+    redirect(base_url('estudiantes/vista_clase/' . $clase));
 
   }
 }

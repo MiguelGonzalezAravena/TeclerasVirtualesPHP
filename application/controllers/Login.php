@@ -21,6 +21,7 @@ class Login extends CI_Controller {
           break;
         case 2: // Estudiante
           $data['titulo'] = 'Panel de Estudiantes';
+          $data['error'] = false;
           $this->load->template('estudiantes_view', $data);
           break;
         case '':

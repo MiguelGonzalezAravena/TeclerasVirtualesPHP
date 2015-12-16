@@ -129,6 +129,16 @@ class Docentes_model extends CI_Model {
     redirect(base_url('docentes/mostrarAsignatura'));
   }
 
+  public function cantidadParalelos($asignatura) {
+    $query = $this->db->get_where('tv_paralelo', array('ASI_ID' => $asignatura));
+
+    if ($query->num_rows() > 0) {
+      return $query;
+    }else{
+      return false;
+    }
+  }
+
   public function crearClase($password) {
     //$selectIdParalelo = $_POST['idParalelo'];
     //$selectIdAsignatura = $_POST['idAsignatura'];

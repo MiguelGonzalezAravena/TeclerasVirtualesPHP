@@ -7,8 +7,8 @@ class Prueba extends CI_Controller {
    $this->load->database('tecleras');
   }
 
- public function ver(){
- 		$datos= array('PM_ID'=> '1');//this->input->post('PM_ID');  esto es lo que deberia hacer uniendo el issue#10
+ public function ver($datos){
+ 		//$datos= array('PM_ID'=> '1');//this->input->post('PM_ID');  esto es lo que deberia hacer uniendo el issue#10
  		$data = array(
  			'titulo' => 'Mostrar datos',//muestra nombre pestaña
 			'arrPregunta'=> $this->prueba_model->get_pregunta($datos),//obtiene los datos necesarios de la tabla maestra

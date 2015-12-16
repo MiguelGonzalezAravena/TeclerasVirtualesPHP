@@ -4,7 +4,6 @@ $respuestas =  explode("@", $preguntaBD->PM_TEXTO);
 <div class="row">
 	 <div class="col-md-12">&nbsp;</div>
 <h2>Editar Pregunta</h2>
-<br /><br /><br />
 <div class="panel panel-default">
 	<div class="panel-body">
       <?php

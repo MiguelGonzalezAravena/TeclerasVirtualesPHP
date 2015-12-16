@@ -17,18 +17,26 @@
 					  	</tr>
 				  	</thead>
   					<tbody>
-  						<?php 
-				        foreach ($asignatura->result() as $row) {
-				          echo "<tr class='fila' id='fila_".$row->ASI_ID."'>
-						          	<td id='id_".$row->ASI_ID."'> ".$row->ASI_ID."</td>
-							        <td id='codigo_".$row->ASI_CODIGO."'>".$row->ASI_CODIGO."</td>
-							        <td id='nombre".$row->ASI_NOMBRE."'>".$row->ASI_NOMBRE."</td>
-							        <td>
-
-										<input type='button' name='clase' id='pregunta_".$row->ASI_ID."' value=".$row->ASI_ID." class='btn btn-default' data-toggle='modal' data-target='#myModal'/>
-							        <td>
-				        		</tr>";
-				        }
+  						<?php
+						if(!$asignatura) {
+							echo '<tr><td align="center" colspan="6">No se han encontrado asignaturas.</td></tr>';
+						} else {
+					        foreach ($asignatura->result() as $row) {
+					          echo "<tr class='fila' id='fila_".$row->ASI_ID."'>
+							          	<td id='id_".$row->ASI_ID."'> ".$row->ASI_ID."</td>
+								        <td id='codigo_".$row->ASI_CODIGO."'>".$row->ASI_CODIGO."</td>
+								        <td id='nombre".$row->ASI_NOMBRE."'>".$row->ASI_NOMBRE."</td>
+								        <td class='btn-group'>
+								        <button class='btn btn-primary' data-toggle='modal' data-target='#myModalParalelo'>
+								        	Crear preguntas
+								        </button>
+								        ";
+								        echo anchor('cursos/create/' . $row->ASI_ID, 'Crear curso', 'class="btn btn-info"');
+								        echo "<input type='button' name='clase' id='pregunta_".$row->ASI_ID."' value='Iniciar clase #".$row->ASI_ID."' class='btn btn-success' data-toggle='modal' data-target='#myModal'/>
+								        <td>
+					        		</tr>";
+					        }
+					      }
 				   		?>
 				
 			  		</tbody>
@@ -39,6 +47,30 @@
 
 	
 	<div class="container">
+	  	<div class="modal fade" id="myModalParalelo" role="dialog">
+		    <div class="modal-dialog">
+		    
+		      <!-- Modal content-->
+	      		<div class="modal-content">
+
+		        	<div class="modal-header">
+			        	<button type="button" class="close" data-dismiss="modal">&times;</button>
+			          	<h4 class="modal-title">Crear preguntas</h4>
+			        </div>
+
+			        <div class="modal-body">
+			          	Antes de iniciar una clase, primero debe crear preguntas para esta clase. Por favor seleccione el paralelo para el cual desea crear preguntas.
+			        </div>
+
+		        	<div class="modal-footer">
+		        		<?php
+                  echo anchor('crearpregunta/index/1', 'Paralelo 1', 'class="btn btn-warning"');
+		        		?>
+		        	</div>
+		      	</div>
+		    </div>
+	  	</div>
+
 	 	<!-- Modal -->
 	  	<div class="modal fade" id="myModal" role="dialog">
 		    <div class="modal-dialog">
@@ -58,9 +90,9 @@
 
 			        </div>
 
-			        <form role="form" action="<?php echo base_url().'index.php/Docentes/crearClase/'.$pass.''?>" method="post">
+			        <form role="form" action="<?php echo base_url('docentes/crearClase/' . $pass); ?>" method="post">
 			        	<div class="modal-footer">
-			        		<input type="submit" id="add" onclick="<?php echo base_url().'index.php/Docentes/mostrarPreguntas'?>" />
+			        		<input type="submit" id="add" class="btn btn-primary" value="Crear clase" onclick="<?php echo base_url('docentes/mostrarPreguntas'); ?>" />
 			        	</div>
 			       	</form>
 		      	</div>

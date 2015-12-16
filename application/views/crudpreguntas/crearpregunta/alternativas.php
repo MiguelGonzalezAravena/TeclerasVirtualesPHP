@@ -1,7 +1,6 @@
 <div class="row">
 	 <div class="col-md-12">&nbsp;</div>
 <h2>Crear Pregunta De alternativa</h2>
-<br /><br /><br />
 <div class="panel panel-default">
 	<div class="panel-body">
       <?php
