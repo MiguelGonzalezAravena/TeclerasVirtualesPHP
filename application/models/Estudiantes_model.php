@@ -45,9 +45,15 @@ class Estudiantes_model extends CI_Model {
     $query = $this->db->get_where('tv_clase', array('CLA_PASSWORD' => $password));
     
     if ($query->num_rows() > 0) {
-      $d=rand(0,99999999999);
+      $d=rand(0,2147483647);
       $id=$this->session->userdata('id_user');
+      //para que no dupliquen las PK de la tabla tv_asistencia_clase
 
+      $pk = $this->db->get_where('tv_asistencia_clase', array('AC_ID' => $d));
+
+        foreach ($pk->result() as $row=>$d){
+               $d=rand(0,2147483647);
+        }
       foreach ($query->result() as $row){
         
         if($row->CLA_PASSWORD=$password){
