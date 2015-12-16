@@ -147,11 +147,11 @@ class Docentes extends CI_Controller {
     
   }
  public function ajaxbuscarPreguntas(){
-     $data = array(
+       $data = array(
       "preguntas" => $this->docentes_model->ajaxbuscar_preguntas()
    );
     
      $this->load->view('docentes/ajaxbuscarPreguntas', $data);
-
   }
+  
 }

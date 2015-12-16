@@ -74,13 +74,39 @@ class Docentes_model extends CI_Model {
       return false;
     }
   
-    redirect(base_url('docentes/crearClase'));
+    //redirect(base_url('docentes/crearClase'));
   }
+
   public function ajaxbuscar_preguntas(){
-    $this->db->like('PM_NOMBRE', $this->input->get('pm_nombre'));
+
+    $pm_nombre = $this->input->get('pm_nombre');
+    $fecha1 = str_replace("/", "-",$this->input->get('fecha1'));
+    $fecha2 = str_replace("/", "-",$this->input->get('fecha2'));
+    $tipoPreguntas = $this->input->get('combo');
+    if(!empty($pm_nombre)){
+      $this->db->like('PM_NOMBRE', $pm_nombre);
+    }
+    if(!empty($fecha1) && !empty($fecha2)){
+      $c0 = "PM_FECHA_CREACION BETWEEN '". date('Y-m-d', strtotime($fecha1)). "' and '". date('Y-m-d', strtotime($fecha2))."'";
+      $this->db->where($c0);
+    }
+    else if(!empty($fecha1)){
+      $c0 = "PM_FECHA_CREACION >= '". date('Y-m-d', strtotime($fecha1))."'";
+      $this->db->where($c0);
+    }
+    else if(!empty($fecha2)){
+      $c0 = "PM_FECHA_CREACION <= '". date('Y-m-d', strtotime($fecha2))."'";
+      $this->db->where($c0);
+    }
+    if(!empty($tipoPreguntas)){
+      $this->db->like('PM_TIPO', $tipoPreguntas);
+    }
+
     $query=$this->db->get('tv_pregunta_maestra');
     return $query;
   }
+
+ 
 
   public function verIdParalelo() {
     //$query = $this->db->query('SELECT PAR_ID FROM tv_paralelo');
