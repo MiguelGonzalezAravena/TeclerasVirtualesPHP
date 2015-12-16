@@ -1,0 +1,16 @@
+<html>
+<body>
+    <?php
+        form_open('Buscar_Respuesta/Validar');
+        
+        from_label('date','date');
+        from_input('Seleccione clase');
+
+        Seleccione Pregunta <?=from_dropdow('Seleccione pregunta',array('1'=>'pregunta 1','2'=>'pregunta 2','3'=>'pregunta 3'));
+
+          
+        echo form_submit('botonSubmit', 'Enviar');
+        echo form_close();
+    ?>
+</body>
+</html>
