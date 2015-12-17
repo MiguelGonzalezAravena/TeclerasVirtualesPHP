@@ -8,11 +8,11 @@ class Chart extends CI_Controller {
 		$this->load->model('data');
 	}  
 	
-	public function index_barra()
+	public function index_Columnas()
 	{
 		$this->load->template('chart');
 	}
-	public function index_pie()
+	public function index_Barra()
 	{
 		$this->load->template('chart2');
 	}
@@ -27,30 +27,28 @@ class Chart extends CI_Controller {
 		$category['name'] = 'Respuesta';
 		
 		$series1 = array();
-		$series1['name'] = 'Frecuencia';
+		$series1['name'] = 'respuesta';
 		
 		$series2 = array();
 		$series2['name'] = 'Frecuencia';
 		
 		$series3 = array();
-		//$series3['name'] = 'Frecuencia';
+		$series3['name'] = 'correcta';
 
 		foreach ($data as $row)
 		{
-		    $pregunta['data'][] = $row->alternativa;
-			$series1['data'][] = $row->alternativa;
+		    $category['data'][] = $row->respuesta;
+			$series1['data'][] = $row->respuesta;
 			$series2['data'][] = $row->frecuencia;
+			$series3['data'][] = $row->correcta;
 
 		}
-
-
-
 
 		$result = array();
 		array_push($result,$category);
 		array_push($result,$series1);
 		array_push($result,$series2);
-		//array_push($result,$series3);
+		array_push($result,$series3);
 		
 		print json_encode($result, JSON_NUMERIC_CHECK);
 	}

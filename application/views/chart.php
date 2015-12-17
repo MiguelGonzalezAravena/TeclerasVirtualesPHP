@@ -2,7 +2,7 @@
 <html>
 	<head>
 		<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-		<title>Grafica Barras</title>
+		<title>Grafica Columnas</title>
 		<script type="text/javascript">
 		$(document).ready(function() {
 			var options = {
@@ -55,8 +55,6 @@
 	        $.getJSON("data", function(json) {
 				options.xAxis.categories = json[1]['data'];
 	        	options.series[0] = json[2];
-	        	//options.series[1] = json[2];
-	        	//options.series[2] = json[3];
 		        chart = new Highcharts.Chart(options);
 	        });
 	    });
