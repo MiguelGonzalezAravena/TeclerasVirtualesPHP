@@ -3,7 +3,6 @@
 	<head>
 		<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 		<title>Grafica Columnas</title>
-		<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
 		<script type="text/javascript">
 		$(document).ready(function() {
 			var options = {
@@ -37,7 +36,7 @@
 	            },
 	            tooltip: {
 	                formatter: function() {
-	                        return '<b>'+ this.series.name +' Pregunta '+
+	                        return '<b>'+ this.series.name + ' Pregunta ' +
 	                        this.x +': '+ this.y;
 	                }
 	            },
@@ -56,8 +55,6 @@
 	        $.getJSON("data", function(json) {
 				options.xAxis.categories = json[1]['data'];
 	        	options.series[0] = json[2];
-	        	//options.series[1] = json[2];
-	        	//options.series[2] = json[3];
 		        chart = new Highcharts.Chart(options);
 	        });
 	    });

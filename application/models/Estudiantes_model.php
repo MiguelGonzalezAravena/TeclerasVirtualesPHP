@@ -37,4 +37,74 @@ class Estudiantes_model extends CI_Model {
     $this->db->delete('tv_estudiante');
     redirect(base_url('estudiantes'));
   }
+
+
+  public function ingresarClase($password) {
+    /**
+     * Una forma más elegante de realizar consultas, Hay que aprovechar los recursos que ofrece el framework.
+     */
+    $query = $this->db->get_where('tv_clase', array('CLA_PASSWORD' => $password));
+    
+    if ($query->num_rows() > 0) {
+      $d=rand(0,2147483647);
+      $id=$this->session->userdata('id_user');
+      //para que no dupliquen las PK de la tabla tv_asistencia_clase
+
+      $pk = $this->db->get_where('tv_asistencia_clase', array('AC_ID' => $d));
+
+        foreach ($pk->result() as $row=>$d){
+               $d=rand(0,2147483647);
+        }
+      foreach ($query->result() as $row){
+        
+        if($row->CLA_PASSWORD == $password){
+            $data = array(
+          'AC_ID' => $d,
+          'EST_ID' => $id,
+          'CLA_ID' => $row->CLA_ID,
+          );
+          $this->db->insert('tv_asistencia_clase', $data);
+          $clase_id = $row->CLA_ID;
+           
+        }
+      }
+      redirect(base_url('estudiantes/vista_clase/' . $clase_id));
+    } else {
+      redirect(base_url('estudiantes/ingresarClase?fail=1'));
+    }
+  }
+
+   public function verPreguntaResponder($clase, $pregunta) {
+    $this->db->select('*');
+    $this->db->from('tv_pregunta_realizada');
+    $this->db->where(array('tv_pregunta_realizada.PM_ID' => $pregunta, 'tv_pregunta_realizada.CLA_ID' => $clase));
+    $this->db->join('tv_pregunta_maestra', 'tv_pregunta_maestra.PM_ID = tv_pregunta_realizada.PM_ID');
+    $query = $this->db->get();
+    
+    if ($query->num_rows() > 0) {
+      return $query;
+    } else {
+      return false;
+    }
+  }
+
+  public function get_respuestas($pregunta) {
+    $query = $this->db->get_where('tv_respuestas', array('PM_ID' => $pregunta));
+
+    if ($query->num_rows() > 0) {
+      return $query;
+    } else {
+      return false;
+    }
+  }
+
+  public function insertarRespuesta() {
+    $data = array(
+      'PR_ID' => $this->input->post('pregunta_id'),
+      'EST_ID' => $this->session->userdata('id_user'),
+      'RES_ID' => $this->input->post('respuesta'),
+    );
+
+    $this->db->insert('tv_pregunta_respondida', $data);
+  }
 }

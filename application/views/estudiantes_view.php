@@ -1,9 +1,32 @@
-  <div class="container-fluid">
-    <h1>Bienvenido, <?php echo $this->session->userdata('name'); ?></h1>
-    <div class="panel panel-warning">
-      <div class="panel-heading">Panel de Estudiantes</div>
-      <div class="panel-body">
-        Pellentesque in ipsum id orci porta dapibus. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Donec velit neque, auctor sit amet aliquam vel, ullamcorper sit amet ligula. Donec sollicitudin molestie malesuada. Vestibulum ac diam sit amet quam vehicula elementum sed sit amet dui. Praesent sapien massa, convallis a pellentesque nec, egestas non nisi.
-      </div>
-    </div>
-  </div>
+<?php
+defined('BASEPATH') OR exit('No direct script access allowed');
+
+  $password = array('name' => 'password', 'placeholder' => 'Introduce contraseña de la clase', 'class' => 'form-control');
+  $submit = array('name' => 'submit', 'value' => 'Ingresar a la clase', 'title' => 'Iniciar sesión', 'class' => 'btn btn-warning');
+?>
+<div class="container-fluid">
+  <h1>Bienvenido, <?php echo $this->session->userdata('name'); ?></h1>
+  <?php
+    if($error):
+  ?>
+    <div class="alert alert-danger" role="alert">La contraseña introducida no es válida. Por favor intente nuevamente.</div>
+  <?php
+    endif;
+  ?>
+  <div class="panel panel-warning">
+    <div class="panel-heading">Ingresar a la clase</div>
+    <div class="panel-body">
+    	<?php echo form_open('estudiantes/ingresarClase'); ?>
+    	<div class="form-group">
+        <?php
+          echo form_password($password);
+        ?>
+  		</div>
+  		<div class="form-group">
+        <?php
+          echo form_submit($submit);
+        ?>
+  		</div>
+  	</div>
+	</div>
+</div>

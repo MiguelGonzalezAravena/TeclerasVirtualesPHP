@@ -18,6 +18,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
     <link rel="stylesheet" type="text/css" href="<?php echo base_url('assets/css/bootstrap-datetimepicker.min.css'); ?>">
 
     <script type="text/javascript" src="<?php echo base_url('assets/js/jquery-1.11.3.min.js'); ?>"></script>
+    
     <!-- Latest compiled and minified JavaScript -->
     <script src="<?php echo base_url('assets/js/bootstrap.min.js'); ?>"></script>
     <!-- Dependencias js -->
@@ -49,6 +50,12 @@ defined('BASEPATH') OR exit('No direct script access allowed');
           <li><?php echo anchor(base_url() . 'docentes', 'Docentes'); ?></li>
           <li><?php echo anchor(base_url() . 'asignaturas', 'Asignaturas'); ?></li>
         <?php } ?>
+        <?php if($this->session->userdata('profile') == 1 && !$this->session->userdata('is_admin')): ?>
+          <li><?php echo anchor(base_url('docentes/mostrarAsignatura'), 'Asignaturas'); ?></li>
+          <li><?php echo anchor(base_url('crudpregunta/index/1'), 'Preguntas'); ?></li>
+          <li><?php echo anchor(base_url('cursos/'), 'Cursos'); ?></li>
+          
+        <?php endif; ?>
       </ul>
       <ul class="nav navbar-nav navbar-right">
         <li>

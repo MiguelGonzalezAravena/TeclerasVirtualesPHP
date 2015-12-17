@@ -21,7 +21,9 @@ class Welcome extends CI_Controller {
 
 	public function index() {
 		$data = array(
-			'titulo' => 'Tecleras Virtuales'
+			'titulo' => 'Tecleras Virtuales',
+			'Hola' => 'hola'
+
 		);
 
 		if($this->session->userdata('is_admin')) {
