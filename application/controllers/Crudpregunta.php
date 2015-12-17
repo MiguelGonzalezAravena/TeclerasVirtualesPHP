@@ -24,20 +24,17 @@ if(!defined('BASEPATH')) exit('No direct script access allowed');
         $data['id'] = $id;
         $data['paralelo'] = $paralelo;
         $data['preguntaBD']= $this->crudpregunta_model->optenerPregunta($id);
-        $data['respuestaBD']= $this->crudpregunta_model->optenerRespuesta($id);
+        $data['respuestas']= $this->crudpregunta_model->optenerRespuesta($id);
         $this->load->template('crudpreguntas/editar/alternativa', $data);
       }
     }
 
     public function editarAlternativa($paralelo){
         $this->form_validation->set_rules('nombreP', 'nombre pregunta', 'required');
-        $this->form_validation->set_rules('respuesta1', 'respuesta 1', 'required');
-        $this->form_validation->set_rules('respuesta2', 'respuesta 2', 'required');
-        $this->form_validation->set_rules('respuesta3', 'respuesta 3', 'required');
         $this->form_validation->set_rules('respuestaCorrecta', 'respuesta Correcta', 'required');
         $this->form_validation->set_rules('explicacionr', 'explicacion respuesta', 'required');
 
-        if ($this->form_validation->run() == FALSE){
+        if (!$this->form_validation->run()){
           $data['titulo'] = 'Editar Pregunta';
           $data['paralelo'] = $paralelo;
           $id = $this->input->post('id');

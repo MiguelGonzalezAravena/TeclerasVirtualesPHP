@@ -10,11 +10,11 @@ class Chart extends CI_Controller {
 	
 	public function index_barra()
 	{
-		$this->load->view('chart');
+		$this->load->template('chart');
 	}
 	public function index_pie()
 	{
-		$this->load->view('chart2');
+		$this->load->template('chart2');
 	}
 	
 	public function data()

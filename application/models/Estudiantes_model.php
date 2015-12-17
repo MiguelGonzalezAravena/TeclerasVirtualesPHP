@@ -74,7 +74,7 @@ class Estudiantes_model extends CI_Model {
     }
   }
 
-   public function verPreguntaResponder($pregunta, $clase) {
+   public function verPreguntaResponder($clase, $pregunta) {
     $this->db->select('*');
     $this->db->from('tv_pregunta_realizada');
     $this->db->where(array('tv_pregunta_realizada.PM_ID' => $pregunta, 'tv_pregunta_realizada.CLA_ID' => $clase));
@@ -88,17 +88,23 @@ class Estudiantes_model extends CI_Model {
     }
   }
 
-  public function insertarRespuesta($pregunta, $clase) {
+  public function get_respuestas($pregunta) {
+    $query = $this->db->get_where('tv_respuestas', array('PM_ID' => $pregunta));
+
+    if ($query->num_rows() > 0) {
+      return $query;
+    } else {
+      return false;
+    }
+  }
+
+  public function insertarRespuesta() {
     $data = array(
-      'PRES_ID' => 1,
-      'PR_ID' => $pregunta,
+      'PR_ID' => $this->input->post('pregunta_id'),
       'EST_ID' => $this->session->userdata('id_user'),
-      'RES_ID' => 1,
+      'RES_ID' => $this->input->post('respuesta'),
     );
 
     $this->db->insert('tv_pregunta_respondida', $data);
-
-    redirect(base_url('estudiantes/vista_clase/' . $clase));
-
   }
 }

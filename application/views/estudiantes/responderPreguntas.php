@@ -1,49 +1,29 @@
 <div class="container-fluid">
-<form role="form" method="POST">
-	<h1>Pregunta a responder</h1>
-
-	<div class="panel panel-default">
-		<!-- Default panel contents -->
-		<div class="panel-heading">Preguntas</div>
-		<div class="panel-body">
-			<div class="table-responsive">
-				<table class="table table-striped">
-					<thead>
-						<tr>
-						    <th>Id Pregunta</th>
-						    <th>Nombre</th>
-						    <th>Fecha Creación</th>
-						    <th>Texto</th>
-						    <th>Tipo</th>
-						    
-						    
-					  	</tr>
-				  	</thead>
-						<tbody>
-							
-							<?php 
-
-					        foreach ($preguntaSeleccionada->result() as $row) {
-					          echo "<tr class='fila' id='fila_".$row->PM_ID."'>
-							          	<td id='id_".$row->PM_ID."'> Pregunta ".$row->PM_ID."</td>
-								        <td id='nombre_".$row->PM_NOMBRE."'>".$row->PM_NOMBRE."</td>
-								        <td id='fecha".$row->PM_FECHA_CREACION."'>".$row->PM_FECHA_CREACION."</td>
-								        <td id='texto".$row->PM_TEXTO."'>".$row->PM_TEXTO."</td>
-								        <td id='tipo".$row->PM_TIPO."'>".$row->PM_TIPO."</td>
-
-					        		</tr>";
-					        }
-					    	?>
-					    	
-			  		</tbody>
-			  	</table>
-			</div>
-	  	</div>
-	</div>
-	
-	    	<label for="textoResp">Respuesta</label>
-	    	<input type="text" id="textoResp" name="textoResp" >
-		</div>
-		<button type="submit" class="btn btn-default">Responder</button>
-	</form>
+  <h1>Pregunta a responder</h1>
+  <?php echo form_open('estudiantes/responderPreguntas'); ?>
+  <input type="hidden" name="pregunta_id" value="<?php echo $pregunta; ?>" />
+  <input type="hidden" name="clase" value="<?php echo $clase; ?>" />
+  <div class="panel panel-primary">
+    <div class="panel-body">
+    <?php foreach($preguntaSeleccionada->result() as $row): ?>
+      <p><h3 class="text-center"><span class="label label-primary"><?php echo $row->PM_TEXTO; ?></span></h3></p>
+      <p><b>Escoja una de las alternativas</b></p>
+      <?php foreach($respuestas->result() as $res): ?>
+          <div class="form-group">
+            <div class="input-group">
+              <span class="input-group-addon">
+                <input type="radio" name="respuesta" value="<?php echo $res->RES_ID; ?>">
+              </span>
+              <input type="text" class="form-control" value="<?php echo $res->RES_TEXTO; ?>" disabled>
+            </div>
+          </div>
+      <?php endforeach; ?>
+      <div class="form-group">
+        <button class="btn btn-danger">
+          Enviar respuesta
+        </button>
+      </div>
+    <?php endforeach; ?>
+    </div>
+  </div>
 </div>
