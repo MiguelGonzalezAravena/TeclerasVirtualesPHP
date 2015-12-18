@@ -80,6 +80,7 @@ class Estudiantes extends CI_Controller {
       "preguntaSeleccionada" => $this->estudiantes_model->verPreguntaResponder($clase, $pregunta),
       "respuestas" => $this->estudiantes_model->get_respuestas($pregunta),
       "id_user" => $this->session->userdata('user_id'),
+      "fueRespondida" => $this->estudiantes_model->fueRespondida($pregunta),
       "pregunta" => $pregunta,
       "clase" => $clase
     );
@@ -91,7 +92,11 @@ class Estudiantes extends CI_Controller {
       $this->estudiantes_model->insertarRespuesta();
       redirect(base_url('estudiantes/vista_clase/' . $this->input->post('clase')));
     }    
-  }   
+  }
+
+  public function fueRespondida($id) {
+
+  }
   
   public function ingresarClase() {
     

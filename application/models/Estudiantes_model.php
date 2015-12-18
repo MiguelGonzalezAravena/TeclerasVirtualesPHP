@@ -38,6 +38,22 @@ class Estudiantes_model extends CI_Model {
     redirect(base_url('estudiantes'));
   }
 
+  public function fueRespondida($id = 0) {
+    /**
+    * SELECT * FROM tv_pregunta_respondida a WHERE a.EST_ID = $VAR INNER JOIN tv_pregunta_realizada b ON a.PR_ID = b.PR_ID
+    */
+    $this->db->select('*');
+    $this->db->from('tv_pregunta_respondida a');
+    $this->db->where(array('a.EST_ID' => $this->session->userdata('id_user'), 'b.PR_ID' => $id));
+    $this->db->join('tv_pregunta_realizada b', 'a.PR_ID = b.PR_ID');
+    $query = $this->db->get();
+    if($query->num_rows() > 0) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
 
   public function ingresarClase($password) {
     /**
