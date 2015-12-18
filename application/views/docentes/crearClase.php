@@ -11,21 +11,6 @@
 
 <div class="container-fluid">
 	<h1>Crear Clase</h1>
-	
-			
-
-	<form role="form" method="POST">
-		<div class="form-group">
-	    	<label for="idClase">ID Clase</label>
-	    	<input class="form-control" id="idClase" name="idClase" value="<?php echo "$i";  ?>" readonly="true">
-	  	</div>
-
-	  	<div class="form-group">
-	    	<label for="idDocente">ID Docente</label>
-			<input class="form-control" id="idClase" name="idClase" value="<?php echo "$idDocente";  ?>" readonly="true">
-	  	</div>
-
-
 	  	<div class="form-group">
 	    	<label for="idParalelo">ID Paralelo</label>
 	        <select class="form-control" id="idParalelo" name="idParalelo">

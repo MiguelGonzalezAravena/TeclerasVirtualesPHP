@@ -3,12 +3,11 @@
 	<head>
 		<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 		<title>Grafica Barra</title>
-		<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
 		<script type="text/javascript">
 		$(document).ready(function() {
 			var options = {
 	            chart: {
-	                renderTo: 'container',
+	                renderTo: 'container2',
 	                type: 'bar',
 	                marginRight: 130,
 	                marginBottom: 25
@@ -67,7 +66,7 @@
 	            series: []
 	        }
 	        
-	        $.getJSON("data", function(json) {
+	        $.getJSON("<?php echo base_url('chart/data/' . $id); ?>", function(json) {
 				options.xAxis.categories = json[3]['data'];
 	        	options.series[0] = json[2];
 	        	//options.series[1] = json[2];
@@ -76,10 +75,8 @@
 	        });
 	    });
 		</script>
-	    <script src="http://code.highcharts.com/highcharts.js"></script>
-        <script src="http://code.highcharts.com/modules/exporting.js"></script>
 	</head>
 	<body>
-		<div id="container" style="min-width: 400px; height: 400px; margin: 0 auto"></div>
+		<div id="container2" style="min-width: 400px; height: 400px; margin: 0 auto"></div>
 	</body>
 </html>

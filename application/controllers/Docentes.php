@@ -33,7 +33,6 @@ class Docentes extends CI_Controller {
   public function create() {
     $data['titulo'] = 'Crear docente';
 
-    $this->form_validation->set_rules('id', 'Identificador', 'required|is_unique[tv_docente.DOC_ID]');
     $this->form_validation->set_rules('name', 'Nombre', 'required');
     $this->form_validation->set_rules('email', 'Correo electrónico', 'required|valid_email|is_unique[tv_docente.DOC_CORREO]');
     $this->form_validation->set_rules('password', 'Contraseña', 'required');
@@ -78,15 +77,84 @@ class Docentes extends CI_Controller {
     redirect(base_url('docentes'));
   }
 
-  public function crearClase($d){
+  public function graficarPregunta() {
+    $id = $this->uri->segment(3);
+  
+    if (empty($id)) {
+      show_404();
+    }
+    
+    $data['titulo'] = 'Graficar pregunta';
+    $data['pregReal'] = $this->docentes_model->get_preguntasRealizadas($id);
+    $data['pregunta'] = $this->docentes_model->get_textoPregunta($id);
+  
+    if(!$data['pregReal']) {
+      redirect(base_url('crudpregunta/index/1'));
+    }
+    $this->load->template('docentes/graficarPregunta', $data);
 
-    $this->docentes_model->crearClase($d);
-    redirect(base_url('docentes/mostrarPreguntas'));
-    
-    
   }
- 
-  public function mostrarAsignatura(){
+
+  public function crearClase(){
+    $passwd = $this->uri->segment(3);
+    $idAsignatura = $this->uri->segment(4);
+    $idParalelo = $this->uri->segment(5);
+    
+    $this->docentes_model->crearClase($passwd, $idAsignatura, $idParalelo);
+  }
+
+  public function mostrarClase() {
+    $id = $this->uri->segment(3);
+    $data = array(
+      "clase" => $this->docentes_model->get_clase($id),
+    );
+
+    if(!$data['clase']) {
+      redirect(base_url('docentes/mostrarAsignatura'));
+    }
+
+    if(!$this->form_validation->run()) {
+      $data['titulo'] = "Mostrar clase";
+      $this->load->template('docentes/mostrarClase', $data);
+    } else {
+      $this->docentes_model->lanzarPregunta();
+      redirect(base_url('docentes/mostrarClase'));
+    }    
+
+  }
+
+
+  public function buscarPreguntas() {
+    $data = array(
+      "preguntas" => $this->docentes_model->verPreguntas()
+    );
+    // issue #14 v2
+    $this->load->template('docentes/buscarPreguntas', $data);
+  }
+
+ public function ajaxbuscarPreguntas() {
+    $data = array(
+      "preguntas" => $this->docentes_model->ajaxbuscar_preguntas(),
+      "clase" => $this->input->get('clase')
+    );
+
+     $this->load->view('docentes/ajaxbuscarPreguntas', $data);
+  }
+
+  public function lanzarPregunta() {
+    $clase = $this->uri->segment(3);
+    $pregunta = $this->uri->segment(4);
+
+    $this->docentes_model->lanzarPregunta($clase, $pregunta);
+  }
+
+  public function terminarClase() {
+    $clase = $this->uri->segment(3);
+
+    $this->docentes_model->terminarClase($clase);
+  }
+
+  public function mostrarAsignatura() {
 
     $d=rand(2000000,300000000);
     
@@ -98,6 +166,7 @@ class Docentes extends CI_Controller {
 
     if (!$this->form_validation->run()) {
 
+      $data['titulo'] = 'Mostrar asignaturas';
       $this->load->template('docentes/mostrarAsignatura', $data);
 
     } else {

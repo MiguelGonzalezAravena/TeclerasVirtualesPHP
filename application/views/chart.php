@@ -7,7 +7,7 @@
 		$(document).ready(function() {
 			var options = {
 	            chart: {
-	                renderTo: 'container',
+	                renderTo: 'container1',
 	                type: 'column',
 	                marginRight: 130,
 	                marginBottom: 25
@@ -36,8 +36,8 @@
 	            },
 	            tooltip: {
 	                formatter: function() {
-	                        return '<b>'+ this.series.name + ' Pregunta ' +
-	                        this.x +': '+ this.y;
+	                        return '<b>'+ this.series.name + ' respuesta \'<i>' +
+	                        this.x +'\'</i>: '+ this.y + '</b>';
 	                }
 	            },
 	            legend: {
@@ -52,17 +52,15 @@
 	            series: []
 	        }
 	        
-	        $.getJSON("data", function(json) {
+	        $.getJSON("<?php echo base_url('chart/data/' . $id); ?>", function(json) {
 				options.xAxis.categories = json[1]['data'];
 	        	options.series[0] = json[2];
 		        chart = new Highcharts.Chart(options);
 	        });
 	    });
 		</script>
-	    <script src="http://code.highcharts.com/highcharts.js"></script>
-        <script src="http://code.highcharts.com/modules/exporting.js"></script>
 	</head>
 	<body>
-		<div id="container" style="min-width: 400px; height: 400px; margin: 0 auto"></div>
+		<div id="container1" style="min-width: 400px; height: 400px; margin: 0 auto"></div>
 	</body>
 </html>

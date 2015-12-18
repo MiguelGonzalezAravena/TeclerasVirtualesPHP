@@ -2,7 +2,6 @@
 defined('BASEPATH') OR exit('No direct script access allowed');
 
 /* Inputs */
-$id = array('name' => 'id', 'type' => 'number', 'placeholder' => 'Identificador', 'class' => 'form-control', 'value' => $docentes['DOC_ID']);
 $name = array('name' => 'name', 'placeholder' => 'Nombre de usuario', 'class' => 'form-control', 'value' => $docentes['DOC_NOMBRE']);
 $email = array('name' => 'email', 'type' => 'email', 'placeholder' => 'Correo electrónico', 'class' => 'form-control', 'value' => $docentes['DOC_CORREO']);
 
@@ -19,15 +18,6 @@ $submit = array('type' => 'submit', 'content' => 'Editar', 'class' => 'btn btn-s
       <?php
         echo form_open('docentes/edit/' . $docentes['DOC_ID']);
       ?>
-      <div class="form-group">
-        <?php
-        /*
-         * Identificador 
-         */
-        echo form_label('ID', 'id');
-        echo form_input($id);
-        ?>
-      </div>
       <div class="form-group">
         <?php
         /*

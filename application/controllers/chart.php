@@ -10,19 +10,25 @@ class Chart extends CI_Controller {
 	
 	public function index_Columnas()
 	{
-		$this->load->template('chart');
+		$data['id'] = $this->uri->segment(3);
+		$this->load->view('chart', $data);
 	}
 	public function index_Barra()
 	{
-		$this->load->template('chart2');
+		$data['id'] = $this->uri->segment(3);
+		$this->load->view('chart2', $data);
 	}
 	
 	public function data()
 	{
-		
-		$data = $this->data->get_data();
-		//$data2 = $this->data->get_data2();
+		$id = $this->uri->segment(3);
 
+		if($id != 0) {
+			$data = $this->data->get_data($id);
+		} else {
+			$data = $this->data->get_data();
+		}
+		//$data2 = $this->data->get_data2();
 		$category = array();
 		$category['name'] = 'Respuesta';
 		
@@ -38,7 +44,7 @@ class Chart extends CI_Controller {
 		foreach ($data as $row)
 		{
 		    $category['data'][] = $row->respuesta;
-			$series1['data'][] = $row->respuesta;
+			$series1['data'][] = $this->data->get_respuesta($row->respuesta);
 			$series2['data'][] = $row->frecuencia;
 			$series3['data'][] = $row->correcta;
 

@@ -48,22 +48,16 @@ class Estudiantes_model extends CI_Model {
     if ($query->num_rows() > 0) {
       $d=rand(0,2147483647);
       $id=$this->session->userdata('id_user');
-      //para que no dupliquen las PK de la tabla tv_asistencia_clase
 
-      $pk = $this->db->get_where('tv_asistencia_clase', array('AC_ID' => $d));
-
-        foreach ($pk->result() as $row=>$d){
-               $d=rand(0,2147483647);
-        }
-      foreach ($query->result() as $row){
-        
+      foreach ($query->result() as $row) {        
         if($row->CLA_PASSWORD == $password){
-            $data = array(
-          'AC_ID' => $d,
-          'EST_ID' => $id,
-          'CLA_ID' => $row->CLA_ID,
+          $data = array(
+            'EST_ID' => $id,
+            'CLA_ID' => $row->CLA_ID,
           );
+
           $this->db->insert('tv_asistencia_clase', $data);
+
           $clase_id = $row->CLA_ID;
            
         }
@@ -75,9 +69,13 @@ class Estudiantes_model extends CI_Model {
   }
 
    public function verPreguntaResponder($clase, $pregunta) {
+      /**
+      * SELECT * FROM tv_pregunta_realizada AS r WHERE r.PM_ID = $pregunta AND r.CLA_ID = $clase INNER JOIN tv_pregunta_maestra AS p ON p.PM_ID = r.PM_ID
+      *
+      */
     $this->db->select('*');
     $this->db->from('tv_pregunta_realizada');
-    $this->db->where(array('tv_pregunta_realizada.PM_ID' => $pregunta, 'tv_pregunta_realizada.CLA_ID' => $clase));
+    $this->db->where(array('tv_pregunta_realizada.PR_ID' => $pregunta, 'tv_pregunta_realizada.CLA_ID' => $clase));
     $this->db->join('tv_pregunta_maestra', 'tv_pregunta_maestra.PM_ID = tv_pregunta_realizada.PM_ID');
     $query = $this->db->get();
     
@@ -89,7 +87,9 @@ class Estudiantes_model extends CI_Model {
   }
 
   public function get_respuestas($pregunta) {
-    $query = $this->db->get_where('tv_respuestas', array('PM_ID' => $pregunta));
+    $query = $this->db->get_where('tv_pregunta_realizada', array('PR_ID' => $pregunta));
+    $pregunta = $query->row();
+    $query = $this->db->get_where('tv_respuestas', array('PM_ID' => $pregunta->PM_ID));
 
     if ($query->num_rows() > 0) {
       return $query;

@@ -31,7 +31,6 @@ class Asignaturas extends CI_Controller {
   public function create() {
     $data['titulo'] = 'Crear asignatura';
 
-    $this->form_validation->set_rules('id', 'Identificador', 'required|is_unique[tv_asignatura.ASI_ID]');
     $this->form_validation->set_rules('name', 'Nombre de asignatura', 'required');
     $this->form_validation->set_rules('code', 'Código de asignatura', 'required');
     
@@ -52,7 +51,7 @@ class Asignaturas extends CI_Controller {
     
     $data['titulo'] = 'Editar asignatura';
     $data['asignaturas'] = $this->asignaturas_model->get_asignaturas($id);
-    $this->form_validation->set_rules('id', 'Identificador', 'required');
+
     $this->form_validation->set_rules('name', 'Nombre de asignatura', 'required');
     $this->form_validation->set_rules('code', 'Código de asignatura', 'required');
     

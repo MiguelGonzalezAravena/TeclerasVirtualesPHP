@@ -12,7 +12,8 @@ class Prueba extends CI_Controller {
  		$data = array(
  			'titulo' => 'Mostrar datos',//muestra nombre pestaña
 			'arrPregunta'=> $this->prueba_model->get_pregunta($datos),//obtiene los datos necesarios de la tabla maestra
-			'arrDatos'=> $this->prueba_model->get_datos_pregunta($datos)//obitne los datos necesarios de la tabla respuesta
+			'arrDatos'=> $this->prueba_model->get_datos_pregunta($datos),//obitne los datos necesarios de la tabla respuesta
+			'id' => 7
 				);
  		$this->load->template('prueba_vista',$data);
 	}

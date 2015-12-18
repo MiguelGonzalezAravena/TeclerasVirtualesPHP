@@ -2,7 +2,6 @@
 defined('BASEPATH') OR exit('No direct script access allowed');
 
 /* Inputs */
-$id = array('name' => 'id', 'type' => 'number', 'placeholder' => 'Identificador', 'class' => 'form-control', 'value' => (isset($_POST['id'])) ? $_POST['id'] : '');
 $code = array('name' => 'code', 'type' => 'text', 'placeholder' => 'Código de asignatura', 'class' => 'form-control', 'value' => (isset($_POST['email'])) ? $_POST['email'] : '');
 $name = array('name' => 'name', 'placeholder' => 'Nombre de asignatura', 'class' => 'form-control', 'value' => (isset($_POST['name'])) ? $_POST['name'] : '');
 $submit = array('type' => 'submit', 'content' => 'Crear', 'class' => 'btn btn-success');
@@ -18,15 +17,6 @@ $submit = array('type' => 'submit', 'content' => 'Crear', 'class' => 'btn btn-su
       <?php
         echo form_open('asignaturas/create', array('autocomplete' => 'off'));
       ?>
-      <div class="form-group">
-        <?php
-        /*
-         * Identificador 
-         */
-        echo form_label('ID', 'id');
-        echo form_input($id);
-        ?>
-      </div>
       <div class="form-group">
         <?php
         /*

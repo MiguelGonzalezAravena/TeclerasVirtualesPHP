@@ -1,8 +1,7 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-$id = array('name' => 'id', 'type' => 'number', 'placeholder' => 'Identificador', 'class' => 'form-control', 'value' => (isset($_POST['id'])) ? $_POST['id'] : '');
-$asignatura = array('name' => 'asignatura', 'type' => 'number', 'placeholder' => 'Asignatura', 'class' => 'form-control', 'value' => (isset($_POST['asignatura'])) ? $_POST['asignatura'] : $asignatura);
+$asignatura2 = array('name' => 'asignatura', 'type' => 'number', 'placeholder' => 'Asignatura', 'class' => 'form-control', 'value' => (isset($_POST['asignatura'])) ? $_POST['asignatura'] : $asignatura);
 $paralelo = array('name' => 'paralelo', 'type' => 'number', 'placeholder' => 'Número', 'class' => 'form-control', 'value' => (isset($_POST['paralelo'])) ? $_POST['paralelo'] : '');
 
 $submit = array('type' => 'submit', 'content' => 'Crear', 'class' => 'btn btn-success');
@@ -17,19 +16,8 @@ $submit = array('type' => 'submit', 'content' => 'Crear', 'class' => 'btn btn-su
    <div class="panel panel-default">
     <div class="panel-body">
       <?php
-        echo form_open('cursos/create', array('autocomplete' => 'off'));
+        echo form_open('cursos/create/' . $asignatura, array('autocomplete' => 'off'));
       ?>
-        <div class="form-group">
- 
-           <?php
-          /*
-           * Identificador 
-          */
-          echo form_label('ID', 'id');
-          echo form_input($id);
-          ?>
-        </div>
-
          <div class="form-group">
  
            <?php
@@ -37,7 +25,7 @@ $submit = array('type' => 'submit', 'content' => 'Crear', 'class' => 'btn btn-su
            * Asignatura 
           */
           echo form_label('Asignatura', 'asignatura');
-          echo form_input($asignatura);
+          echo form_input($asignatura2);
           ?>
         </div>
          <div class="form-group">

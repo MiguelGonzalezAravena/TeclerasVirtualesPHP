@@ -28,7 +28,6 @@ class Estudiantes extends CI_Controller {
   public function create() {
     $data['titulo'] = 'Crear estudiante';
 
-    $this->form_validation->set_rules('id', 'Identificador', 'required|is_unique[tv_estudiante.EST_ID]');
     $this->form_validation->set_rules('name', 'Nombre', 'required');
     $this->form_validation->set_rules('email', 'Correo electrónico', 'required|valid_email|is_unique[tv_estudiante.EST_CORREO]');
     $this->form_validation->set_rules('password', 'Contraseña', 'required');
@@ -50,7 +49,7 @@ class Estudiantes extends CI_Controller {
     
     $data['titulo'] = 'Editar estudiante';
     $data['estudiantes'] = $this->estudiantes_model->get_users($id);
-    $this->form_validation->set_rules('id', 'Identificador', 'required');
+
     $this->form_validation->set_rules('name', 'Nombre', 'required');
     $this->form_validation->set_rules('email', 'Correo electrónico', 'required');
     

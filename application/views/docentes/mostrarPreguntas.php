@@ -1,6 +1,3 @@
-<script type='text/javascript' src="//ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
-
-
 <div class="panel panel-default">
 <!-- Default panel contents -->
 	<div class="panel-heading">Seleccionar Preguntas</div>

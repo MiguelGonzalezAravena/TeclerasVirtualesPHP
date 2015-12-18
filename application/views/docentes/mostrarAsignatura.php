@@ -26,14 +26,11 @@
 							          	<td id='id_".$row->ASI_ID."'> ".$row->ASI_ID."</td>
 								        <td id='codigo_".$row->ASI_CODIGO."'>".$row->ASI_CODIGO."</td>
 								        <td id='nombre".$row->ASI_NOMBRE."'>".$row->ASI_NOMBRE."</td>
-								        <td class='btn-group'>
-								        <button class='btn btn-primary' data-toggle='modal' data-target='#myModalParalelo'>
-								        	Crear preguntas
-								        </button>
-								        ";
-								        echo anchor('cursos/create/' . $row->ASI_ID, 'Crear curso', 'class="btn btn-info"');
-								        echo "<input type='button' name='clase' id='pregunta_".$row->ASI_ID."' value='Iniciar clase #".$row->ASI_ID."' class='btn btn-success' data-toggle='modal' data-target='#myModal'/>
-								        <td>
+								        <td class='btn-group'>";
+                        echo anchor('crudpregunta/index/1', 'Crear preguntas', 'class="btn btn-primary"');
+                        echo anchor('cursos/create/' . $row->ASI_ID, 'Crear curso', 'class="btn btn-info"');
+								        echo anchor('docentes/crearClase/' . $pass . '/' . $row->ASI_ID . '/1', 'Iniciar clase', 'class="btn btn-success"');
+								        echo "</td>
 					        		</tr>";
 					        }
 					      }
@@ -90,11 +87,12 @@
 
 			        </div>
 
-			        <form role="form" action="<?php echo base_url('docentes/crearClase/' . $pass); ?>" method="post">
-			        	<div class="modal-footer">
-			        		<input type="submit" id="add" class="btn btn-primary" value="Crear clase" onclick="<?php echo base_url('docentes/mostrarPreguntas'); ?>" />
-			        	</div>
-			       	</form>
+		        	<div class="modal-footer">
+		        		<?php
+                  echo anchor('docentes/crearClase/' . $pass . '/asd/1/', 'Crear clase', 'class="btn btn-primary"');
+		        		?>	
+			        	<input type="submit" id="add" class="btn btn-primary" value="Crear clase" onclick="<?php echo base_url('docentes/crearClase/' . $pass . '//1/'); ?>" />
+			        </div>
 		      	</div>
 		    </div>
 	  	</div>
