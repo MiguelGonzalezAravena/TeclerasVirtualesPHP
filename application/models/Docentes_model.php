@@ -190,7 +190,11 @@ class Docentes_model extends CI_Model {
     );
 
     $this->db->insert('tv_pregunta_realizada', $data);
-    redirect(base_url('docentes/mostrarClase/' . $data['CLA_ID']));
+
+    $this->db->select('MAX(PR_ID) AS PR_ID');
+    $query = $this->db->get('tv_pregunta_realizada');
+    $pregReal = $query->row();
+    redirect(base_url('docentes/mostrarClase/' . $data['CLA_ID'] . '/' . $pregReal->PR_ID));
 
   }
 

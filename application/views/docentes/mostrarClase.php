@@ -147,6 +147,46 @@
     $('#pm_nombre').on('keyup', function() {
       ejecutarPregunta();
     });
+
+    // Client here
+    var socket = null;
+    var uri = "ws://localhost:2207";
+    var con = 0;
+    var message = '<?php echo ($this->uri->segment(4) ? '{CLA_ID: ' . $clase['CLA_ID'] . ', PR_ID: ' . $this->uri->segment(4) . '}' : ''); ?>';
+    socket = new WebSocket(uri);
+    if(!socket || socket == undefined) return false;
+    socket.onopen = function(){
+      console.log('Connected to server ' + uri);
+      console.log(message);
+      if(message.length > 0) {
+        console.log('Enviando');
+        socket.send(JSON.stringify(eval('(' + message + ')')));
+      }
+    }
+    socket.onerror = function(){
+      console.log('Error');
+    }
+    socket.onclose = function(){
+      console.log('Close');
+      con--;
+      $('#conectados').html(con);
+      socket.close();
+    }
+
+    socket.onmessage = function(e) {
+      //if(e.data != message) {
+        if(e.data.indexOf('{') != -1 && e.data != message) {
+          con++;
+          $('#conectados').html(con);
+          var json = JSON.stringify(eval('(' + e.data + ')'));
+          console.log(json);
+          if(json.indexOf('EST_ID') != -1) {
+            socket.send(JSON.stringify(eval('(' + message + ')')));
+          }
+        }
+      //}
+    }
     
   });
+
 </script>
