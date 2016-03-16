@@ -1,6 +1,6 @@
 <?php defined('BASEPATH') OR exit('No direct script access allowed'); ?>
 <div class="container-fluid">
-<h1>Mostrar clase #<?php echo $clase['CLA_ID'] . ' ' . anchor('docentes/terminarClase/' . $clase['CLA_ID'], 'Terminar clase', 'class="pull-right label label-danger"'); ?></h1>
+<h1>Mostrar clase #<?php echo $clase['CLA_ID'] . ' ' . anchor('docentes/mostrarAsignatura', 'Terminar clase', 'class="pull-right label label-danger"'); ?></h1>
 <h4>Estudiantes conectados <code id="conectados">0</code></h4>
    <div class="panel panel-default">
     <div class="panel-body">
