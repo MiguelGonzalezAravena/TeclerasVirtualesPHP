@@ -17,7 +17,7 @@ class Login extends CI_Controller {
       switch ($this->session->userdata('profile')) {
         case 1: // Docente
           $data['titulo'] = 'Panel de Docentes';
-          $this->load->template('docentes_selec_pregunta', $data);
+          $this->load->template('docentes_view', $data);
           break;
         case 2: // Estudiante
           $data['titulo'] = 'Panel de Estudiantes';
@@ -29,7 +29,7 @@ class Login extends CI_Controller {
           $data['token'] = $this->token();
           $data['titulo'] = 'Acceso al sistema';
           $this->load->template('login_view', $data);
-          break;    
+          break;
       }
     }
   }
