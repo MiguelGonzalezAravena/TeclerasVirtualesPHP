@@ -6,7 +6,7 @@ Demo Websocket: Server Code
     @Website: www.nhatanh.net
     @Email: anhvnse@gmail.com
  */
-require "PHP-Websockets/websockets.php";
+require "vendor/websockets.php";
 
 class Server extends WebSocketServer
 {
