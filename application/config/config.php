@@ -3,6 +3,15 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 /*
 |--------------------------------------------------------------------------
+| Websocket IO & Port
+|--------------------------------------------------------------------------
+*/
+$config['websocket_ip'] = $_SERVER['SERVER_NAME'];
+$config['websocket_port'] = '2207';
+
+$config['websocket_external'] = 'ws://echo.websocket.org';
+/*
+|--------------------------------------------------------------------------
 | Base Site URL
 |--------------------------------------------------------------------------
 |
@@ -23,7 +32,8 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 | a PHP script and you can easily do that on your own.
 |
 */
-$config['base_url'] = 'http://localhost/CodeIgniter';
+// Cambiar localhost por 200.14.68.31
+$config['base_url'] = 'http://' . $_SERVER['SERVER_NAME'] . '/TeclerasVirtuales';
 
 /*
 |--------------------------------------------------------------------------
