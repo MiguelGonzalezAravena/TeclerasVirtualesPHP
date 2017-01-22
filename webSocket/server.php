@@ -39,8 +39,14 @@ class Server extends WebSocketServer
 }
 
 
-$addr = 'localhost';
+//$addr = '200.14.68.31';
+$addr = '0.0.0.0';
 $port = '2207';
 
 $server = new Server($addr, $port);
-$server->run();
+try {
+  $server->run();
+}
+catch (Exception $e) {
+  $server->stdout($e->getMessage());
+}
