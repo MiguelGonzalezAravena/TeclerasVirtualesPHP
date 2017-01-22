@@ -98,31 +98,52 @@ class Docentes extends CI_Controller {
   public function crearClase(){
     $passwd = $this->uri->segment(3);
     $idAsignatura = $this->uri->segment(4);
-    $idParalelo = $this->uri->segment(5);
-    
-    $this->docentes_model->crearClase($passwd, $idAsignatura, $idParalelo);
+
+    $this->docentes_model->crearClase($passwd, $idAsignatura);
   }
 
   public function mostrarClase() {
     $id = $this->uri->segment(3);
+    $id_pregunta = (is_numeric($this->uri->segment(4))) ? $this->uri->segment(4) : false;
     $data = array(
-      "clase" => $this->docentes_model->get_clase($id),
+      'clase' => $this->docentes_model->get_clase($id),
+      'pregunta' => $this->docentes_model->get_textoPreguntaRealizada($id_pregunta)
     );
 
     if(!$data['clase']) {
-      redirect(base_url('docentes/mostrarAsignatura'));
+      redirect('docentes/mostrarAsignaturas');
     }
 
     if(!$this->form_validation->run()) {
-      $data['titulo'] = "Mostrar clase";
+      $data['titulo'] = 'Mostrar clase';
       $this->load->template('docentes/mostrarClase', $data);
     } else {
       $this->docentes_model->lanzarPregunta();
-      redirect(base_url('docentes/mostrarClase'));
+      redirect('docentes/mostrarClase');
     }    
-
   }
 
+  public function obtenerPregunta($id) {
+      return 'Pregunta número ' + $id;
+  }
+
+  public function mostrarResultados() {
+    $clase_id = $this->uri->segment(3);
+    $preguntaRealizada_id = $this->uri->segment(4);
+
+    $respuestas = $this->docentes_model->getRespuestas($clase_id, $preguntaRealizada_id)->result();
+    for ($i = 0; $i < count($respuestas); $i++) {
+      $contador = $this->docentes_model->getContadorRespuestas($respuestas[$i]->id, $preguntaRealizada_id)->result();
+      $respuestas[$i]->dato = $contador[0]->dato;
+      if($respuestas[$i]->correcta == 1) {
+        $respuestas[$i]->alternativa .= ' (correcta)';
+      }
+    }
+
+    $this->output
+      ->set_content_type('application/json')
+      ->set_output(json_encode($respuestas));
+  }
 
   public function buscarPreguntas() {
     $data = array(
@@ -154,32 +175,20 @@ class Docentes extends CI_Controller {
     $this->docentes_model->terminarClase($clase);
   }
 
-  public function mostrarAsignatura() {
-
-    $d=rand(2000000,300000000);
-    
+  public function mostrarAsignaturas() {
     $data = array(
-      
-      "asignatura" => $this->docentes_model->verAsignatura(),
-      "pass"=>$d
+      'asignatura' => $this->docentes_model->verAsignatura()
     );
 
     if (!$this->form_validation->run()) {
-
       $data['titulo'] = 'Mostrar asignaturas';
-      $this->load->template('docentes/mostrarAsignatura', $data);
-
+      $this->load->template('docentes/mostrarAsignaturas', $data);
     } else {
       $this->load->template('docentes/mostrarPreguntas');
-      
-    }    
+    }
   }
 
-
-
-  public function mostrarPreguntas(){
-    
-    
+  public function mostrarPreguntas() {
       $data = array(
         "preguntas" => $this->docentes_model->verPreguntas()
         
@@ -191,12 +200,11 @@ class Docentes extends CI_Controller {
 
       } else {
         $this->docentes_model->set_users($id);
-        redirect(base_url('docentes'));
+        redirect('docentes');
       }    
   }
   
-  public function mostrarPreguntaSeleccionada(){
-    
+  public function mostrarPreguntaSeleccionada() {
     $data = array(
 
       "preguntaSeleccionada" => $this->docentes_model->verPreguntasSeleccionadas()
@@ -215,6 +223,15 @@ class Docentes extends CI_Controller {
     $tiempoFinal = $this->input->post('tiempoFinal');
     echo($tiempoFinal);
     $this->docentes_model->insertarTiempoFinal($tiempoFinal);
+
+  }
+
+  public function asistenciaClase() {
+    $id = $this->uri->segment(3);
+    $asistencia = $this->docentes_model->get_asistencia($id);
+    $this->output
+      ->set_content_type('application/json')
+      ->set_output(json_encode(($asistencia != false > 0 ? $asistencia->result() : '')));
 
   }
   

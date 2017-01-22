@@ -82,7 +82,8 @@ class Estudiantes extends CI_Controller {
       "id_user" => $this->session->userdata('user_id'),
       "fueRespondida" => $this->estudiantes_model->fueRespondida($pregunta),
       "pregunta" => $pregunta,
-      "clase" => $clase
+      "clase" => $this->estudiantes_model->get_nombreAsignatura($clase),
+      'fecha_actual' => mdate('%d-%m-%Y, a las %h:%i %a', now())
     );
 
     if (!$this->form_validation->run()) {
@@ -99,8 +100,6 @@ class Estudiantes extends CI_Controller {
   }
   
   public function ingresarClase() {
-    
-
     /**
      * form_validation es un validador del formulario que enviaste
      * El primer parámetro es el nombre del campo que enviaste desde el formulario
@@ -125,15 +124,16 @@ class Estudiantes extends CI_Controller {
        */
       $password = $this->input->post('password');
       $check_user = $this->estudiantes_model->ingresarClase($password);
-      if(check_user==true)
-      $this->estudiantes_model->ingresarClase($password);
-      //redirect(base_url('estudiantes/claseAlgo'));
+      if(check_user) {
+        $this->estudiantes_model->ingresarClase($password);
+      }
+      //redirect('estudiantes/claseAlgo');
     }
   }
 
   public function vista_clase($clase) {
     $data['titulo'] = 'Ingresar a clase';
     $data['clase'] = $clase;
-    $this->load->template('estudiantes/vista_clase',$data);
+    $this->load->template('estudiantes/vista_clase', $data);
   }
 }
