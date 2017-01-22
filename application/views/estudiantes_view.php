@@ -7,7 +7,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 <div class="container-fluid">
   <h1>Bienvenido, <?php echo $this->session->userdata('name'); ?></h1>
   <?php
-    if(isset($error)):
+    if(isset($error) && $error):
   ?>
     <div class="alert alert-danger" role="alert">La contraseña introducida no es válida. Por favor intente nuevamente.</div>
   <?php

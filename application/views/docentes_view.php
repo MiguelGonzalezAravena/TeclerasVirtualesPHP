@@ -1,9 +1,16 @@
 <div class="container-fluid">
     <h1>Bienvenido, <?php echo $this->session->userdata('name'); ?></h1>
-    <div class="panel panel-info">
-      <div class="panel-heading">Panel de Docentes</div>
+    <div class="panel panel-primary">
+      <div class="panel-heading">Opciones de docente</div>
       <div class="panel-body">
-        Pellentesque in ipsum id orci porta dapibus. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Donec velit neque, auctor sit amet aliquam vel, ullamcorper sit amet ligula. Donec sollicitudin molestie malesuada. Vestibulum ac diam sit amet quam vehicula elementum sed sit amet dui. Praesent sapien massa, convallis a pellentesque nec, egestas non nisi.
+        <p class="text-justify">
+          Bienvenido al panel de docentes. A continuación se mostrarán las distintas opciones a las cuales puede acceder.
+          <div class="text-center col-md-6">
+            <a href="<?php echo base_url('docentes/mostrarAsignaturas'); ?>" class="col-md-12 btn btn-class btn-success">Mis asignaturas</a>
+          </div>
+          <div class="text-center col-md-6">
+            <a href="/formularios" class="col-md-12 btn btn-class btn-info">Banco de preguntas</a></div>
+        </p>
       </div>
     </div>
   </div>

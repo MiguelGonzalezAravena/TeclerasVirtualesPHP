@@ -1,7 +1,40 @@
 <?php defined('BASEPATH') OR exit('No direct script access allowed'); ?>
 <div class="container-fluid">
-<h1>Mostrar clase #<?php echo $clase['CLA_ID'] . ' ' . anchor('docentes/mostrarAsignatura', 'Terminar clase', 'class="pull-right label label-danger"'); ?></h1>
-<h4>Estudiantes conectados <code id="conectados">0</code></h4>
+  <h1>Mostrar clase #<?php echo $clase['CLA_ID'] . ' ' . anchor('docentes/mostrarAsignatura', 'Terminar clase', 'class="pull-right label label-danger"'); ?></h1>
+  <h4>Estudiantes conectados <code id="conectados">0</code></h4>
+  <div class="form-group">
+    <button class="btn btn-xs btn-primary" id="asistenciaClase">
+      <i class="glyphicon glyphicon-user"></i>
+      Asistencia a clase
+    </button>
+  </div>
+<?php if(is_numeric($this->uri->segment(4))) { ?>
+    <div class="form-group">
+        <div class="alert alert-info">
+            <h3>
+                <i class="glyphicon glyphicon-time"></i>
+                En espera de respuestas para la pregunta:
+            </h3>
+            <div class="text-center">
+                <em>"<?php echo $pregunta; ?>"</em>
+            </div>
+        </div>
+
+    </div>
+<div class="form-group">
+  <a href="<?php echo base_url('docentes/mostrarClase/' . $this->uri->segment(3) . '/resultados/' . $this->uri->segment(4) . '/'); ?>" class="btn btn-warning">
+    <i class="glyphicon glyphicon-stats"></i>
+    Terminar pregunta y ver resultados
+  </a>
+</div>
+<?php } else if($this->uri->segment(4) == 'resultados') { ?>
+<h3>Resultados de la pregunta</h3>
+<div class="panel panel-default">
+  <div class="panel-body text-center">
+    <canvas id="graficoResultados" width="1024" height="500"></canvas>
+  </div>
+</div>
+<?php } ?>
    <div class="panel panel-default">
     <div class="panel-body">
       <div class="form-group">
@@ -95,8 +128,7 @@
                   
                 </tr>
               </thead>
-              <tbody 
-                  id="tabla_datos">
+              <tbody id="tabla_datos">
               </tbody>
           </table>
         </div>
@@ -111,7 +143,7 @@
   function ejecutarPregunta() {
    console.log($('#fecha1').val());
     $.ajax({
-      url: '<?php echo base_url("docentes/ajaxbuscarPreguntas"); ?>',
+      url: '<?php echo base_url('docentes/ajaxbuscarPreguntas'); ?>',
       type: 'GET',
       data: 
         {
@@ -128,6 +160,8 @@
   }
 
   $(document).on('ready', function() {
+    // Primera carga
+    ejecutarPregunta();
 
     $(document).on('click', '#combo-container .dropdown-menu li a', function() {
       elegido = $(this).attr('value');  
@@ -150,17 +184,21 @@
 
     // Client here
     var socket = null;
-    var uri = "ws://localhost:2207";
+    var uri = 'ws://<?php echo $this->config->item('websocket_ip'); ?>:<?php echo $this->config->item('websocket_port'); ?>';
+    //var uri = '<?php echo $this->config->item('websocket_external'); ?>';
     var con = 0;
-    var message = '<?php echo ($this->uri->segment(4) ? '{CLA_ID: ' . $clase['CLA_ID'] . ', PR_ID: ' . $this->uri->segment(4) . '}' : ''); ?>';
+    var docenteMsg = {
+      CLA_ID: '<?php echo $clase['CLA_ID']; ?>',
+      PR_ID: '<?php echo ($this->uri->segment(4) != 'resultados' && $this->uri->segment(4) != '' ? $this->uri->segment(4) : ''); ?>'
+    };
     socket = new WebSocket(uri);
     if(!socket || socket == undefined) return false;
     socket.onopen = function(){
       console.log('Connected to server ' + uri);
-      console.log(message);
-      if(message.length > 0) {
+      console.log(docenteMsg);
+      if(JSON.stringify(docenteMsg).length > 0) {
         console.log('Enviando');
-        socket.send(JSON.stringify(eval('(' + message + ')')));
+        socket.send(JSON.stringify(docenteMsg));
       }
     }
     socket.onerror = function(){
@@ -174,16 +212,19 @@
     }
 
     socket.onmessage = function(e) {
+      console.log(e);
       //if(e.data != message) {
-        if(e.data.indexOf('{') != -1 && e.data != message) {
+        if(e.data.indexOf('{') != -1 && e.data != JSON.stringify(docenteMsg)) {
           con++;
           $('#conectados').html(con);
-          var json = JSON.stringify(eval('(' + e.data + ')'));
+          var json = JSON.stringify(e.data);
           console.log(json);
           if(json.indexOf('EST_ID') != -1) {
-            socket.send(JSON.stringify(eval('(' + message + ')')));
+            socket.send(JSON.stringify(docenteMsg));
           }
-        }
+        } else {
+        console.log(e);
+      }
       //}
     }
     

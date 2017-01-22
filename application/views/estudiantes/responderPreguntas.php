@@ -1,18 +1,31 @@
 <div class="container-fluid">
-  <h1>Pregunta a responder</h1>
+  <p>
+    <i class="glyphicon glyphicon-info-sign"></i>
+    <b>Asignatura:</b>
+    <?php echo $clase; ?>
+  </p>
+  <p>
+    <i class="glyphicon glyphicon-calendar"></i>
+    <b>Fecha:</b>
+    <?php echo $fecha_actual; ?>
+  </p>
+  <p></p>
   <?php echo form_open('estudiantes/responderPreguntas'); ?>
   <input type="hidden" name="pregunta_id" value="<?php echo $pregunta; ?>" />
   <input type="hidden" name="clase" value="<?php echo $clase; ?>" />
   <div class="panel panel-primary">
     <div class="panel-body">
       <?php if($fueRespondida) { ?>
-        <div class="alert alert-danger">
-          <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
-          Esta pregunta ya fue respondida. Espera a la siguiente pregunta...
+        <div class="alert alert-info">
+          <i class="glyphicon glyphicon-info-sign"></i>
+          Pregunta respondida. Esperando la siguiente pregunta.
         </div>
       <?php } else { ?>
         <?php foreach($preguntaSeleccionada->result() as $row): ?>
-          <p><h3 class="text-center"><span class="label label-primary"><?php echo $row->PM_TEXTO; ?></span></h3></p>
+          <p class="alert alert-info">
+            <i class="glyphicon glyphicon-chevron-right"></i>
+            <?php echo $row->PM_TEXTO; ?>
+          </p>
           <p><b>Escoja una de las alternativas</b></p>
           <?php foreach($respuestas->result() as $res): ?>
               <div class="form-group">
@@ -38,8 +51,11 @@
   $(document).on('ready', function() {
     // Client here
     var socket = null;
-    var uri = "ws://localhost:2207";
-    var message = '{EST_ID: <?php echo $this->session->userdata('id_user'); ?>}';
+    var uri = 'ws://<?php echo $this->config->item('websocket_ip'); ?>:<?php echo $this->config->item('websocket_port'); ?>';
+    //var uri = '<?php echo $this->config->item('websocket_external'); ?>';
+    var estudianteMsg = {
+      EST_ID: '<?php echo $this->session->userdata('id_user'); ?>'
+    }
     socket = new WebSocket(uri);
     if(!socket || socket == undefined) return false;
     socket.onopen = function(){
@@ -55,12 +71,16 @@
       socket.close();
     }
     socket.onmessage = function(e) {
-      if(e.data != JSON.stringify(message)) {
-        if(e.data.indexOf('{') != -1 && e.data != message) {
-          var json = JSON.parse(JSON.stringify(eval('(' + e.data + ')')));
+      if(e.data != JSON.stringify(estudianteMsg)) {
+        if(e.data.indexOf('{') != -1 && e.data != JSON.stringify(estudianteMsg)) {
+          var json = JSON.parse(e.data);
           console.log(json);
-          location.href='<?php echo base_url('estudiantes/responderPreguntas'); ?>/' + json.CLA_ID + '/' + json.PR_ID + '/'
+          if(json.PR_ID != '' && json.PR_ID != 'undefined' && json.PR_ID != 'resultados') {
+            location.href = '<?php echo base_url('estudiantes/responderPreguntas'); ?>/' + json.CLA_ID + '/' + json.PR_ID + '/'
+          }
         }
+      } else {
+        console.log(e);
       }
     }
     

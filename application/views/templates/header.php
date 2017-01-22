@@ -8,23 +8,17 @@ defined('BASEPATH') OR exit('No direct script access allowed');
     <title><?php echo $titulo; ?></title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <!-- Latest compiled and minified CSS -->
-    <link rel="stylesheet" href="<?php echo base_url('assets/css/bootstrap.min.css'); ?>">
-
-    <!-- Template general -->
-    <link rel="stylesheet" type="text/css" href="<?php echo base_url('assets/css/style.css'); ?>">
-
     <!-- Dependencias css -->
     <link rel="stylesheet" type="text/css" href="<?php echo base_url('assets/css/bootstrap-datetimepicker.min.css'); ?>">
-
-    <script type="text/javascript" src="<?php echo base_url('assets/js/jquery-1.11.3.min.js'); ?>"></script>
-    
-    <!-- Latest compiled and minified JavaScript -->
-    <script src="<?php echo base_url('assets/js/bootstrap.min.js'); ?>"></script>
+    <link rel="stylesheet" href="<?php echo base_url('assets/css/bootstrap.min.css'); ?>">
+    <link rel="stylesheet" type="text/css" href="<?php echo base_url('assets/css/style.css'); ?>">
     <!-- Dependencias js -->
+    <script type="text/javascript" src="<?php echo base_url('assets/js/jquery-1.11.3.min.js'); ?>"></script>
+    <script type="text/javascript" src="<?php echo base_url('assets/js/bootstrap.min.js'); ?>"></script>
     <script type="text/javascript" src="<?php echo base_url('assets/js/bootstrap-datetimepicker.min.js'); ?>"></script>
-
-    <!-- Codes general -->
+    <script type="text/javascript" src="<?php echo base_url('vendor/bootbox.js/bootbox.js'); ?>"></script>
+    <script type="text/javascript" src="<?php echo base_url('assets/js/Chart.min.js'); ?>"></script>
+    <!-- Código general -->
     <script type="text/javascript" src="<?php echo base_url('assets/js/codes.js'); ?>"></script>
   </head>
   <body>
@@ -46,20 +40,19 @@ defined('BASEPATH') OR exit('No direct script access allowed');
       <ul class="nav navbar-nav">
         <li class=""><a href="<?php echo site_url(); ?>">Inicio</a></li>
         <?php if($this->session->userdata('is_admin')) { ?>
-          <li><?php echo anchor(base_url() . 'estudiantes', 'Estudiantes'); ?></li>
-          <li><?php echo anchor(base_url() . 'docentes', 'Docentes'); ?></li>
-          <li><?php echo anchor(base_url() . 'asignaturas', 'Asignaturas'); ?></li>
+          <li><?php echo anchor(base_url('estudiantes'), 'Estudiantes'); ?></li>
+          <li><?php echo anchor(base_url('docentes'), 'Docentes'); ?></li>
+          <li><?php echo anchor(base_url('asignaturas'), 'Asignaturas'); ?></li>
         <?php } ?>
         <?php if($this->session->userdata('profile') == 1 && !$this->session->userdata('is_admin')): ?>
-          <li><?php echo anchor(base_url('docentes/mostrarAsignatura'), 'Asignaturas'); ?></li>
+          <li><?php echo anchor(base_url('docentes/mostrarAsignaturas'), 'Asignaturas'); ?></li>
           <li><?php echo anchor(base_url('crudpregunta/index/1'), 'Preguntas'); ?></li>
-          <li><?php echo anchor(base_url('cursos/'), 'Cursos'); ?></li>
-          
+
         <?php endif; ?>
       </ul>
       <ul class="nav navbar-nav navbar-right">
         <li>
-          <?php echo anchor(base_url() . ($this->session->userdata('is_logued_in') == true ? 'login/logout_ci' : 'login'), ($this->session->userdata('is_logued_in') == true ? 'Cerrar sesión' : 'Acceder')); ?>
+          <?php echo anchor(base_url(($this->session->userdata('is_logued_in') == true ? 'login/logout_ci' : 'login')), ($this->session->userdata('is_logued_in') == true ? 'Cerrar sesión' : 'Acceder')); ?>
         </li>
       </ul>
 
