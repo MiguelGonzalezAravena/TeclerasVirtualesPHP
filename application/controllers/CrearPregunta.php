@@ -8,32 +8,26 @@ class CrearPregunta extends CI_Controller{
 
 		}
 
-		public function index($paralelo){
+		public function index(){
 			$data['titulo'] = 'Crear Pregunta';
-      $paralelo = 1;
-      $data['paralelo'] = $paralelo;
   		$this->load->template('crudpreguntas/crearpregunta_view', $data);
 		}
 
-		public function crearpa($paralelo)
-		{
-      $data['paralelo'] = $paralelo;
+		public function crearpa() {
 			$data['titulo'] = 'Crear Pregunta Alternativa';
-      $data['id_paralelo'] = $this->Crearpregunta_model->optenerParalelo();
-   		$this->load->template('crudpreguntas/crearpregunta/alternativas', $data);
+      $this->load->template('crudpreguntas/crearpregunta/alternativas', $data);
 		}
 
-    public function insertarPA($paralelo) {
+    public function insertarPA() {
       $this->form_validation->set_rules('nombreP', 'Nombre pregunta', 'required');
       $this->form_validation->set_rules('respuestaCorrecta', 'Respuesta correcta', 'required');
       $this->form_validation->set_rules('explicacionr', 'Explicacion respuesta', 'required');
       if (!$this->form_validation->run()) {
         $data['titulo'] = 'Crear Pregunta Alternativa';
-        $data['paralelo'] = $paralelo;
         $this->load->template('crudpreguntas/crearpregunta/alternativas', $data);
       } else {
-        $this->Crearpregunta_model->set_preguntaA($paralelo);
-        redirect(base_url('crudpregunta/index/' .$paralelo));
+        $this->Crearpregunta_model->set_preguntaA();
+        redirect('crudpregunta/index');
       }
    }
 
@@ -41,7 +35,7 @@ class CrearPregunta extends CI_Controller{
     $id = $this->uri->segment(3);
 
     if(empty($id)) {
-      redirect(base_url('crudpregunta/index/1'));
+      redirect('crudpregunta/index/1');
     }
 
     $this->Crearpregunta_model->delete_alternativa($id);

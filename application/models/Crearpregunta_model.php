@@ -8,10 +8,6 @@ class Crearpregunta_model extends CI_Model{
   }
 
   public function set_preguntaA($curso){
-    $query = $this->db->get_where('tv_paralelo', array('PAR_ID' => $curso));
-    $paralelo = $curso;
-    $row = $query->row();
-
     $respuestas = $this->input->post('respuesta');
     $respuestaCorrecta = $this->input->post('respuestaCorrecta');
 
@@ -22,10 +18,7 @@ class Crearpregunta_model extends CI_Model{
       'PM_RUTA_IMAGEN' => $this->input->post('urlImagen'),
       'PM_RUTA_VIDEO' => $this->input->post('urlVideo'),
       'PM_EXPLICACION' => $this->input->post('explicacionr'),
-      'PM_RUTA_IMAGEN_EXPLICACION' => $this->input->post('imagenexplicacionr'),
-      'TV_PARALELO_PAR_ID' => $paralelo,
-      'TV_PARALELO_ASI_ID' => $row->ASI_ID,
-      'TV_PARALELO_TV_DOCENTE_DOC_ID' => $row->TV_DOCENTE_DOC_ID,
+      'PM_RUTA_IMAGEN_EXPLICACION' => $this->input->post('imagenexplicacionr')
     );
 
     $this->db->insert('tv_pregunta_maestra', $data1);
@@ -56,14 +49,6 @@ class Crearpregunta_model extends CI_Model{
   }
 
   public function optenerParalelo(){
-        $data = array();
-        $query = $this->db->get('tv_paralelo');
-        if ($query->num_rows() > 0) {
-            foreach ($query->result_array() as $row){
-                    $data[] = $row;
-                }
-        }
-        $query->free_result();
         return $data;
-     }
+  }
 }

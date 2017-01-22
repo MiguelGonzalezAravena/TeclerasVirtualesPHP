@@ -7,9 +7,9 @@ class crudpregunta_model extends CI_Model{
     parent::__construct();
   }
 
-  public function optenerPreguntas($paralelo){
+  public function optenerPreguntas(){
         $data = array();
-        $query = $this->db->query('select PM_ID, PM_NOMBRE, PM_TIPO from tv_pregunta_maestra where TV_PARALELO_PAR_ID ='.$paralelo.'');
+        $query = $this->db->query('select PM_ID, PM_NOMBRE, PM_TIPO from tv_pregunta_maestra');
         if ($query->num_rows() > 0) {
             foreach ($query->result_array() as $row){
                     $data[] = $row;

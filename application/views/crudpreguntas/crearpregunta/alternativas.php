@@ -4,7 +4,7 @@
 <div class="panel panel-default">
 	<div class="panel-body">
       <?php
-        echo form_open('crearpregunta/insertarPA/' . $paralelo, array('autocomplete' => 'off'));
+        echo form_open('crearpregunta/insertarPA/', array('autocomplete' => 'off'));
       ?>
         <div class="form-group">
         <?php
