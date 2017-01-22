@@ -1,0 +1,30 @@
+{
+  "name": "tecleras-virtuales",
+  "homepage": "https://github.com/MiguelGonzalezAravena/TeclerasVirtualesPHP",
+  "authors": [
+    "Miguel González Aravena <miguel.gonzalez.93@gmail.com>"
+  ],
+  "description": "El proyecto consiste en el desarrollo de un sistema de Tecleras Virtuales en base el framework CodeIgniter en el lenguaje de programación PHP, para Desarrollo Web, Universidad de Valparaíso, 2015",
+  "main": "",
+  "keywords": [
+    "tecleras",
+    "virtuales",
+    "php",
+    "docentes",
+    "estudiantes",
+    "preguntas",
+    "respuestas",
+    "alternativa"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "bootbox.js": "^4.4.0"
+  }
+}
