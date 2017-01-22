@@ -54,48 +54,73 @@ class Estudiantes_model extends CI_Model {
     }
   }
 
-
   public function ingresarClase($password) {
-    /**
-     * Una forma más elegante de realizar consultas, Hay que aprovechar los recursos que ofrece el framework.
-     */
     $query = $this->db->get_where('tv_clase', array('CLA_PASSWORD' => $password));
     
-    if ($query->num_rows() > 0) {
-      $d=rand(0,2147483647);
-      $id=$this->session->userdata('id_user');
-
-      foreach ($query->result() as $row) {        
-        if($row->CLA_PASSWORD == $password){
+    if($query->num_rows() > 0) {
+      $id = $this->session->userdata('id_user');
+      foreach ($query->result() as $row) {
+        if($row->CLA_PASSWORD == $password) {
+          $clase_id = $row->CLA_ID;
+          $pregunta_id = $row->PM_ID;
           $data = array(
             'EST_ID' => $id,
-            'CLA_ID' => $row->CLA_ID,
+            'CLA_ID' => $clase_id
           );
+          // Registrar asistencia a la clase
+          if(!$this->get_asistencia($clase_id)) {
+            $this->db->insert('tv_asistencia_clase', $data);
+          }
 
-          $this->db->insert('tv_asistencia_clase', $data);
-
-          $clase_id = $row->CLA_ID;
-           
+          // Si ya hay una pregunta lanzada, se redirecciona a la pregunta
+          // sino, se redirecciona a la vista de clase a la espera de una
+          // próxima pregunta lanzada
+          if($pregunta_id != 0) {
+            redirect('estudiantes/responderPreguntas/' . $clase_id . '/' . $pregunta_id . '/');
+          } else {
+            redirect('estudiantes/vista_clase/' . $clase_id);
+          }
         }
       }
-      redirect(base_url('estudiantes/vista_clase/' . $clase_id));
     } else {
-      redirect(base_url('estudiantes/ingresarClase?fail=1'));
+      redirect('estudiantes/ingresarClase?fail=1');
     }
   }
 
-   public function verPreguntaResponder($clase, $pregunta) {
-      /**
-      * SELECT * FROM tv_pregunta_realizada AS r WHERE r.PM_ID = $pregunta AND r.CLA_ID = $clase INNER JOIN tv_pregunta_maestra AS p ON p.PM_ID = r.PM_ID
-      *
-      */
+  public function get_asistencia($id) {
+    $est_id = $this->session->userdata('id_user');;
+    $query = $this->db->get_where('tv_asistencia_clase', array('EST_ID' => $est_id, 'CLA_ID' => $id));
+    return ($query->num_rows() > 0) ? true : false;
+  }
+
+  public function get_nombreAsignatura($clase_id) {
+    $this->db->select('ASI_NOMBRE');
+    $this->db->from('tv_clase c');
+    $this->db->where('c.CLA_ID', $clase_id);
+    $this->db->join('tv_asignatura a', 'a.ASI_ID = c.ASI_ID');
+    $query = $this->db->get();
+
+    // ASI_NOMBRE
+    if($query->num_rows() > 0) {
+      return $query->result()[0]->ASI_NOMBRE;
+    } else {
+      return false;
+    }
+
+  }
+
+  public function verPreguntaResponder($clase, $pregunta) {
+    /**
+    * SELECT * FROM tv_pregunta_realizada AS r WHERE r.PM_ID = $pregunta AND r.CLA_ID = $clase INNER JOIN tv_pregunta_maestra AS p ON p.PM_ID = r.PM_ID
+    *
+    */
     $this->db->select('*');
-    $this->db->from('tv_pregunta_realizada');
-    $this->db->where(array('tv_pregunta_realizada.PR_ID' => $pregunta, 'tv_pregunta_realizada.CLA_ID' => $clase));
-    $this->db->join('tv_pregunta_maestra', 'tv_pregunta_maestra.PM_ID = tv_pregunta_realizada.PM_ID');
+    $this->db->from('tv_pregunta_realizada AS r');
+    $this->db->where(array('r.PR_ID' => $pregunta, 'r.CLA_ID' => $clase));
+    $this->db->join('tv_pregunta_maestra AS p', 'p.PM_ID = r.PM_ID');
     $query = $this->db->get();
     
-    if ($query->num_rows() > 0) {
+    if($query->num_rows() > 0) {
       return $query;
     } else {
       return false;

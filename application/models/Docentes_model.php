@@ -49,17 +49,21 @@ class Docentes_model extends CI_Model {
 
   public function delete_clase($id = 0) {
     if($id == 0) {
-      redirect(base_url('docentes/mostrarAsignatura'));
+      redirect('docentes/mostrarAsignaturas');
     }
 
     $this->db->where('CLA_ID', $id);
     $this->db->delete('tv_clase');
-    redirect(base_url('docentes/mostrarAsignatura'));
+    redirect('docentes/mostrarAsignaturas');
+  }
+
+  public function getTituloPregunta($id) {
+    // TODO
   }
 
   public function get_preguntasRealizadas($id) {
     if($id == 0) {
-      redirect(base_url('docentes/mostrarAsignatura'));
+      redirect('docentes/mostrarAsignaturas');
     }
     
     $this->db->select('*');
@@ -77,9 +81,27 @@ class Docentes_model extends CI_Model {
     }
   }
 
+    public function get_textoPreguntaRealizada($id) {
+        if($id == 0) {
+          //redirect('docentes/mostrarAsignaturas');
+        }
+
+        $this->db->select('pm.PM_TEXTO');
+        $this->db->from('tv_pregunta_realizada pr');
+        $this->db->where('pr.PR_ID', $id);
+        $this->db->join('tv_pregunta_maestra pm', 'pr.PM_ID = pm.PM_ID');
+        $query = $this->db->get();
+        $preg = $query->row();
+        if($query->num_rows() > 0) {
+          return $preg->PM_TEXTO;
+        } else {
+          return false;
+        }
+    }
+
   public function get_textoPregunta($id) {
     if($id == 0) {
-      redirect(base_url('docentes/mostrarAsignatura'));
+      redirect('docentes/mostrarAsignaturas');
     }
 
     $query = $this->db->get_where('tv_pregunta_maestra', array('PM_ID' => $id));
@@ -94,17 +116,6 @@ class Docentes_model extends CI_Model {
   public function verIdAsignatura() {
     $this->db->select('ASI_ID');
     $query = $this->db->get('tv_asignatura');
-
-    if($query->num_rows() > 0) {
-      return $query;
-    } else {
-      return false;
-    }
-  }
-
-  public function verIdParalelo() {
-    $this->db->select('PAR_ID');
-    $query = $this->db->get('tv_paralelo');
 
     if($query->num_rows() > 0) {
       return $query;
@@ -150,37 +161,18 @@ class Docentes_model extends CI_Model {
       return false;
     }
   
-    redirect(base_url('docentes/mostrarAsignatura'));
+    redirect('docentes/mostrarAsignaturas');
   }
 
-  public function cantidadParalelos($asignatura) {
-    $query = $this->db->get_where('tv_paralelo', array('ASI_ID' => $asignatura));
-
-    if($query->num_rows() > 0) {
-      return $query;
-    } else {
-      return false;
-    }
-  }
-
-  public function crearClase($passwd, $idAsignatura, $idParalelo) {
-    $this->db->select('PAR_ID');
-    $query = $this->db->get_where('tv_paralelo', array('PAR_NUMERO' => $idParalelo, 'ASI_ID' => $idAsignatura));
-    $paralelo = $query->row();
-
+  public function crearClase($passwd, $idAsignatura) {
     $data = array(
       'CLA_PASSWORD' => $passwd,
       'DOC_ID' => $this->session->userdata('id_user'),
-      'ASI_ID' => $idAsignatura,
-      'PAR_ID' => $paralelo->PAR_ID
+      'ASI_ID' => $idAsignatura
     );
 
     $this->db->insert('tv_clase', $data);
-
-    $this->db->select('MAX(CLA_ID) AS CLA_ID');
-    $query = $this->db->get('tv_clase');
-    $clase = $query->row();
-    redirect(base_url('docentes/mostrarClase/' . $clase->CLA_ID));
+    redirect('docentes/mostrarClase/' . $this->db->insert_id());
   }
 
   public function lanzarPregunta($clase, $pregunta) {
@@ -189,13 +181,51 @@ class Docentes_model extends CI_Model {
       'PM_ID' => $pregunta
     );
 
+    // Insertar pregunta realizada
     $this->db->insert('tv_pregunta_realizada', $data);
+    $preguntaRealizada_id = $this->db->insert_id();
 
-    $this->db->select('MAX(PR_ID) AS PR_ID');
-    $query = $this->db->get('tv_pregunta_realizada');
-    $pregReal = $query->row();
-    redirect(base_url('docentes/mostrarClase/' . $data['CLA_ID'] . '/' . $pregReal->PR_ID));
+    // Modificar pregunta realizada en la clase
+    $pr_data = array(
+      'PR_ID' => $pregunta
+    );
 
+    // Actualizar campo 'PR_ID'
+    $this->db->where('CLA_ID', $clase);
+    $this->db->update('tv_clase', $pr_data);
+
+    // Redireccionar
+    redirect(base_url('docentes/mostrarClase/' . $clase . '/' . $preguntaRealizada_id));
+  }
+
+  public function getRespuestas($clase, $preguntaRealizada) {
+    $this->db->select('respuestas.RES_TEXTO AS alternativa, respuestas.RES_ID AS id, respuestas.PM_CORRECTA AS correcta');
+    $this->db->from('tv_pregunta_realizada AS pregunta_realizada');
+    $this->db->join('tv_pregunta_maestra AS pregunta_maestra', 'pregunta_realizada.PM_ID = pregunta_maestra.PM_ID');
+    $this->db->join('tv_respuestas AS respuestas', 'pregunta_realizada.PM_ID = respuestas.PM_ID');
+    $this->db->where('pregunta_realizada.CLA_ID', $clase);
+    $this->db->where('pregunta_realizada.PR_ID', $preguntaRealizada);
+    $query = $this->db->get();
+
+    if($query->num_rows() > 0) {
+      return $query;
+    } else {
+      return false;
+    }
+  }
+
+  public function getContadorRespuestas($respuesta, $preguntaRealizada) {
+    $this->db->select('COUNT(*) AS dato');
+    $this->db->from('tv_pregunta_respondida AS pregunta_respondida');
+    $this->db->where('pregunta_respondida.RES_ID', $respuesta);
+    $this->db->where('pregunta_respondida.PR_ID', $preguntaRealizada);
+    $query = $this->db->get();
+
+    if($query->num_rows() > 0) {
+      return $query;
+    } else {
+      return false;
+    }
   }
 
   public function terminarClase($clase) {
@@ -203,7 +233,7 @@ class Docentes_model extends CI_Model {
     
     $this->db->where('CLA_ID', $clase);
     $this->db->delete('tv_clase');
-    redirect(base_url('docentes/mostrarAsignatura'));
+    redirect('docentes/mostrarAsignaturas');
   }
 
   public function verPreguntas() {
@@ -288,6 +318,20 @@ class Docentes_model extends CI_Model {
     $this->db->where('PR_ID', $idMAX);
 
     return $this->db->update('tv_pregunta_realizada', $data);
+  }
+
+  public function get_asistencia($id) {
+    $this->db->select('ac.EST_ID estudiante_id, e.EST_NOMBRE nombre');
+    $this->db->from('tv_asistencia_clase ac');
+    $this->db->where('ac.CLA_ID', $id);
+    $this->db->join('tv_estudiante e', 'e.EST_ID = ac.EST_ID');
+    $query = $this->db->get();
+
+    if($query->num_rows() > 0) {
+      return $query;
+    } else {
+      return false;
+    }
   }
 
 }
