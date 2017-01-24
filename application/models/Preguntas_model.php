@@ -1,47 +1,78 @@
 <?php
 
-class crudpregunta_model extends CI_Model{
-
-  
+class Preguntas_model extends CI_Model{
   public function __construct() {
     parent::__construct();
   }
 
-  public function optenerPreguntas(){
-        $data = array();
-        $query = $this->db->query('select PM_ID, PM_NOMBRE, PM_TIPO from tv_pregunta_maestra');
-        if ($query->num_rows() > 0) {
-            foreach ($query->result_array() as $row){
-                    $data[] = $row;
-                }
-        }
-        $query->free_result();
-        return $data;
-     }
-    public function optenerPregunta($id){
-        $query = $this->db->query('select * from tv_pregunta_maestra where PM_ID ='.$id.'');
-        return $query->row();
-     }
+  public function get_preguntas() {
+    $this->db->order_by('PM_ID', 'DESC');
+    $query = $this->db->get('tv_pregunta_maestra');
 
-    public function optenerRespuesta($id){
-      $query = $this->db->get_where('tv_respuestas', array('PM_ID' => $id));
-
-      if($query->num_rows() > 0) {
-        return $query;
-      } else {
-        return false;
-      }
-     }
-
-    public function eliminar($id){
-      $this->db->where('PM_ID',$id);
-      if($this->db->delete('tv_respuestas')){
-        $this->db->where('PM_ID', $id);
-        return $this->db->delete('tv_pregunta_maestra');
-      }
+    if($query->num_rows() > 0) {
+      return $query->result_array();
+    } else {
+      return false;
     }
+  }
 
-  public function upDatePpreguntaA($id) {
+  public function get_pregunta($id) {
+    $query = $this->db->query('select * from tv_pregunta_maestra where PM_ID = ' . $id);
+    return $query->row();
+  }
+
+  public function get_respuesta($id) {
+    $query = $this->db->get_where('tv_respuestas', array('PM_ID' => $id));
+
+    if($query->num_rows() > 0) {
+      return $query->result_array();
+    } else {
+      return false;
+    }
+  }
+
+  public function eliminar($id){
+    $this->db->where('PM_ID',$id);
+    if($this->db->delete('tv_respuestas')){
+      $this->db->where('PM_ID', $id);
+      return $this->db->delete('tv_pregunta_maestra');
+    }
+  }
+
+  public function set_preguntaAlternativa() {
+    $respuestas = $this->input->post('respuesta');
+    $respuestaCorrecta = $this->input->post('respuestaCorrecta');
+
+    $data1 = array(
+      'PM_NOMBRE' => $this->input->post('nombreP'),
+      'PM_TEXTO' =>  $this->input->post('pregunta'),
+      'PM_TIPO' => '1',
+      'PM_RUTA_IMAGEN' => $this->input->post('urlImagen'),
+      'PM_RUTA_VIDEO' => $this->input->post('urlVideo'),
+      'PM_EXPLICACION' => $this->input->post('explicacionr'),
+      'PM_RUTA_IMAGEN_EXPLICACION' => $this->input->post('imagenexplicacionr')
+    );
+
+    $this->db->insert('tv_pregunta_maestra', $data1);
+    $pregunta_id = $this->db->insert_id();
+    $j = 1;
+    for($i = 0; $i < count($respuestas); $i++) {
+      $data2 = array(
+        'RES_TEXTO' => $respuestas[$i],
+        'PM_ID' => $pregunta_id,
+        'PM_CORRECTA' => ($respuestaCorrecta == $j ? 1 : 0)
+      );
+      $this->db->insert('tv_respuestas', $data2);
+      $j++;
+    }
+  }
+
+  public function delete_alternativa($id) {
+    $this->db->where('RES_ID', $id);
+    $this->db->delete('tv_respuestas');
+  }
+
+  public function update_alternativa($id) {
     /**
     * Capturar datos
     */
@@ -92,5 +123,4 @@ class crudpregunta_model extends CI_Model{
       $j++;
     }
   }
-
 }

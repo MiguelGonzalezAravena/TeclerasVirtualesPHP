@@ -31,5 +31,20 @@ class MY_Loader extends CI_Loader {
         break;
     }
   }
+
+  public function tipoPregunta_enlace($tipo) {
+    switch ($tipo) {
+      default:
+      case 1:
+        return 'alternativa';
+        break;
+      case 2:
+        return 'dicotomica';
+        break;
+      case 3:
+        return 'likert';
+        break;
+    }
+  }
 }
 ?>
