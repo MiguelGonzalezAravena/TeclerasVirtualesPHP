@@ -4,15 +4,15 @@ class Docentes extends CI_Controller {
   public function __construct() {
     parent::__construct();
     $this->i = 0;
-    
     $this->load->model('docentes_model');
-    
+    if(!$this->session->userdata('id_user')) {
+      redirect('/');
+    }
   }
 
   public function index() {
     $data['titulo'] = 'Lista de docentes';
     $data['docentes'] = $this->docentes_model->get_users();
-    
     $this->load->template('docentes/index', $data);
   }
   
@@ -25,9 +25,7 @@ class Docentes extends CI_Controller {
     
     $data['titulo'] = 'Ver docente';
     $data['docentes'] = $this->docentes_model->get_users($id);
-  
     $this->load->template('docentes/view', $data);
-
   }
   
   public function create() {
@@ -41,7 +39,7 @@ class Docentes extends CI_Controller {
       $this->load->template('docentes/create', $data);
     } else {
       $this->docentes_model->set_users();
-      redirect(base_url('docentes'));
+      redirect('docentes');
     }
   }
   
@@ -62,7 +60,7 @@ class Docentes extends CI_Controller {
       $this->load->template('docentes/edit', $data);
     } else {
       $this->docentes_model->set_users($id);
-      redirect(base_url('docentes'));
+      redirect('docentes');
     }    
   }
   
@@ -70,11 +68,11 @@ class Docentes extends CI_Controller {
     $id = $this->uri->segment(3);
 
     if(empty($id)) {
-      redirect(base_url('docentes'));
+      redirect('docentes');
     }
 
     $this->docentes_model->delete_user($id);
-    redirect(base_url('docentes'));
+    redirect('docentes');
   }
 
   public function graficarPregunta() {
@@ -89,7 +87,7 @@ class Docentes extends CI_Controller {
     $data['pregunta'] = $this->docentes_model->get_textoPregunta($id);
   
     if(!$data['pregReal']) {
-      redirect(base_url('crudpregunta/index/1'));
+      redirect('crudpregunta/index/1');
     }
     $this->load->template('docentes/graficarPregunta', $data);
 
@@ -191,7 +189,6 @@ class Docentes extends CI_Controller {
   public function mostrarPreguntas() {
       $data = array(
         "preguntas" => $this->docentes_model->verPreguntas()
-        
       );
 
       if (!$this->form_validation->run()) {
@@ -206,7 +203,6 @@ class Docentes extends CI_Controller {
   
   public function mostrarPreguntaSeleccionada() {
     $data = array(
-
       "preguntaSeleccionada" => $this->docentes_model->verPreguntasSeleccionadas()
     );
 
@@ -214,7 +210,7 @@ class Docentes extends CI_Controller {
       $this->load->template('docentes/mostrarPreguntaSeleccionada', $data);
     } else {
       $this->docentes_model->set_users($id);
-      redirect(base_url('docentes'));
+      redirect('docentes');
     }    
   }
 
@@ -232,7 +228,5 @@ class Docentes extends CI_Controller {
     $this->output
       ->set_content_type('application/json')
       ->set_output(json_encode(($asistencia != false > 0 ? $asistencia->result() : '')));
-
   }
-  
 }

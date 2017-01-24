@@ -3,6 +3,9 @@ class Estudiantes extends CI_Controller {
   public function __construct() {
     parent::__construct();
     $this->load->model('estudiantes_model');
+    if(!$this->session->userdata('id_user')) {
+      redirect('/');
+    }
   }
 
   public function index() {

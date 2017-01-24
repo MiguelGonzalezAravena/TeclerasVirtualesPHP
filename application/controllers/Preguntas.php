@@ -4,14 +4,13 @@ if(!defined('BASEPATH')) exit('No direct script access allowed');
 	class Crudpregunta extends CI_Controller{
 		public function __construct() {
     		parent::__construct();
-        $this->load->model('crudpregunta_model');
+        $this->load->model('Preguntas_model');
   		}
 
-  	public function index($paralelo){
-        $data['titulo'] = 'Preguntas';
-        $data['paralelo']= $paralelo;
-        $data['preguntas'] = $this->crudpregunta_model->optenerPreguntas($paralelo);
-        $this->load->template('crudpreguntas_view', $data);
+  	public function index() {
+      $data['titulo'] = 'Preguntas';
+      $data['preguntas'] = $this->crudpregunta_model->optenerPreguntas($paralelo);
+      $this->load->template('crudpreguntas_view', $data);
     }	
 
     public function eliminarPregunta($idPregunta , $paralelo){
