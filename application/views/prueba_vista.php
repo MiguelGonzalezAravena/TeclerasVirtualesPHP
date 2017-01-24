@@ -3,7 +3,7 @@
   // En caso de que no exista la variable
   $correcta = 'Ninguna';
   foreach($arrPregunta->result() as $row):
-    $fecha = explode(' ',$row->PM_FECHA_CREACION);//tabla_maestra
+    $fecha = explode(' ', $row->PM_FECHA_CREACION);//tabla_maestra
     $respuestas = explode('@', $row->PM_TEXTO);
     foreach ($arrDatos->result() as $row2):
       if($row2->PM_CORRECTA == 1) {
@@ -26,5 +26,5 @@
   <p><i>► <?php echo $row->PM_EXPLICACION; ?></i></p>
 </div>
 </div>
-<?php echo anchor('crudpregunta/index/1', 'Ver banco de preguntas', 'class="btn btn-primary"'); ?>
+<?php echo anchor('preguntas', 'Ver banco de preguntas', 'class="btn btn-primary"'); ?>
   <?php endforeach; ?>

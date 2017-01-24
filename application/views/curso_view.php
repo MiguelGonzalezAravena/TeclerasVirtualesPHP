@@ -11,7 +11,6 @@
           <thead>
             <tr>
               <th>#</th>
-              <th>Número paralelo</th>
               <th>ID Asignatura</th>
               <th>ID Docente</th>
               <th>Acción</th>
@@ -20,7 +19,6 @@
           <tbody>
             <?php foreach ($docentes as $user): ?>
               <tr>
-                <th class="scope"><?php echo $user['PAR_ID'] ?></th>
                 <td><?php echo $user['PAR_NUMERO'] ?></td>
                 <td><?php echo $user['ASI_ID'] ?></td>
                 <td><?php echo $user['TV_DOCENTE_DOC_ID'] ?></td>
@@ -34,7 +32,7 @@
         </table>
       </div>
     </div>
-    <?php echo anchor('docentes/mostrarAsignatura', 'Volver a asignaturas', 'class="btn btn-primary"'); ?>
+    <?php echo anchor('docentes/mostrarAsignaturas', 'Volver a asignaturas', 'class="btn btn-primary"'); ?>
   </div>
 
   

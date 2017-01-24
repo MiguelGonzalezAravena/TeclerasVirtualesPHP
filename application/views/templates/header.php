@@ -46,7 +46,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
         <?php } ?>
         <?php if($this->session->userdata('profile') == 1 && !$this->session->userdata('is_admin')): ?>
           <li><?php echo anchor(base_url('docentes/mostrarAsignaturas'), 'Asignaturas'); ?></li>
-          <li><?php echo anchor(base_url('crudpregunta/index/1'), 'Preguntas'); ?></li>
+          <li><?php echo anchor(base_url('preguntas'), 'Preguntas'); ?></li>
 
         <?php endif; ?>
       </ul>

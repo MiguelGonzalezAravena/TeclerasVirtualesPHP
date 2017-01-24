@@ -9,7 +9,7 @@
             <a href="<?php echo base_url('docentes/mostrarAsignaturas'); ?>" class="col-md-12 btn btn-class btn-success">Mis asignaturas</a>
           </div>
           <div class="text-center col-md-6">
-            <a href="/formularios" class="col-md-12 btn btn-class btn-info">Banco de preguntas</a></div>
+            <a href="<?php echo base_url('preguntas'); ?>" class="col-md-12 btn btn-class btn-info">Banco de preguntas</a></div>
         </p>
       </div>
     </div>
